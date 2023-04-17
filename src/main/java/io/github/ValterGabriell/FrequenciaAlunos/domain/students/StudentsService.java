@@ -6,7 +6,7 @@ import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsReposi
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.List;
 
 @Service
 public class StudentsService {
@@ -27,5 +27,9 @@ public class StudentsService {
 
         studentsRepository.save(student);
         return student;
+    }
+
+    public List<Student> getAllStudentsFromDatabase() {
+        return studentsRepository.findAll();
     }
 }
