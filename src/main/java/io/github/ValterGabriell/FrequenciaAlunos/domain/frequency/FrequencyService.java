@@ -5,6 +5,8 @@ import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseDa
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseValidateFrequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.StudentValidation;
+import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
+import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,25 +23,45 @@ public class FrequencyService extends StudentValidation {
         this.studentsRepository = studentsRepository;
     }
 
-    public ResponseValidateFrequency validateFrequency(String studentId) {
+    /**
+     * method that validate student frequency
+     *
+     * @param studentId
+     * @return response with the student frequency validated or erro while validation frequency
+     * TODO: create validation to student only mark frequency once per day.
+     */
+    public ResponseValidateFrequency validateFrequency(String studentId) throws RequestExceptions {
+        if (studentId.length() != 11) {
+            throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
+        }
+
+        ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
+        ArrayList<Days> arrayOfDay = new ArrayList<>();
+        Days days = new Days();
+
         Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
         Frequency frequency = student.getFrequency();
 
-        ArrayList<Days> arrayOfDay = new ArrayList<>();
-        Days days = new Days();
         days.setFrequency(frequency);
         days.setDate(LocalDate.now());
         arrayOfDay.add(days);
-
         frequency.setDaysList(arrayOfDay);
         studentsRepository.save(student);
 
-        ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
         responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " válidada! - Dia: " + LocalDate.now());
         return responseValidateFrequency;
     }
 
-    public ResponseDaysThatStudentGoToClass getListOfDaysByFrequencyId(String studentId) {
+    /**
+     * return list with days that specific student watched class
+     *
+     * @param studentId
+     */
+    public ResponseDaysThatStudentGoToClass getListOfDaysByFrequencyId(String studentId) throws RequestExceptions {
+        if (studentId.length() != 11) {
+            throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
+        }
+
         Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
         ResponseDaysThatStudentGoToClass responseDaysThatStudentGoToClass = new ResponseDaysThatStudentGoToClass();
         responseDaysThatStudentGoToClass.setStudentId(student.getCpf());

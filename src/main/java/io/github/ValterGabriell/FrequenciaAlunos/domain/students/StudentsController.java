@@ -19,7 +19,7 @@ public class StudentsController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> insertStudentsIntoDatabase(@RequestBody InsertStudents request) {
+    public ResponseEntity<Student> insertStudentsIntoDatabase(@RequestBody InsertStudents request) throws Exception {
         Student student = service.insertStudentIntoDatabase(request);
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
