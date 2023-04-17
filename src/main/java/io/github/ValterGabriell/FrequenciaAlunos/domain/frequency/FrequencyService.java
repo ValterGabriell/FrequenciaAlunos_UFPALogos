@@ -2,6 +2,7 @@ package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseDaysThatStudentGoToClass;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseValidateFrequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.StudentValidation;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
@@ -20,7 +21,7 @@ public class FrequencyService extends StudentValidation {
         this.studentsRepository = studentsRepository;
     }
 
-    public Student validateFrequency(String studentId) {
+    public ResponseValidateFrequency validateFrequency(String studentId) {
         Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
         Frequency frequency = student.getFrequency();
 
@@ -33,7 +34,9 @@ public class FrequencyService extends StudentValidation {
         frequency.setDaysList(arrayOfDay);
         studentsRepository.save(student);
 
-        return student;
+        ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
+        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " válidada! - Dia: " + LocalDate.now());
+        return responseValidateFrequency;
     }
 
     public ResponseDaysThatStudentGoToClass getListOfDaysByFrequencyId(String studentId) {
@@ -41,7 +44,6 @@ public class FrequencyService extends StudentValidation {
         ResponseDaysThatStudentGoToClass responseDaysThatStudentGoToClass = new ResponseDaysThatStudentGoToClass();
         responseDaysThatStudentGoToClass.setStudentId(student.getCpf());
         responseDaysThatStudentGoToClass.setDaysListThatStudentGoToClass(student.getFrequency().getDaysList());
-        responseDaysThatStudentGoToClass.setFrequencyId(student.getCpf());
         return responseDaysThatStudentGoToClass;
     }
 

@@ -2,6 +2,7 @@ package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseDaysThatStudentGoToClass;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseValidateFrequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class FrequencyController {
     }
 
     @PostMapping(params = {"studentId"})
-    public ResponseEntity<Student> validateFrequency(@RequestParam String studentId) {
-        Student student = frequencyService.validateFrequency(studentId);
-        return new ResponseEntity<>(student, HttpStatus.OK);
+    public ResponseEntity<ResponseValidateFrequency> validateFrequency(@RequestParam String studentId) {
+        ResponseValidateFrequency responseValidadeFrequency = frequencyService.validateFrequency(studentId);
+        return new ResponseEntity<>(responseValidadeFrequency, HttpStatus.OK);
     }
 
     @GetMapping(params = {"studentId"})

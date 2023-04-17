@@ -1,5 +1,6 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.students;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
 import jakarta.persistence.*;
 
@@ -13,6 +14,7 @@ public class Student {
     private String username;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Frequency frequency;
 
     public Student(String cpf, String username) {
