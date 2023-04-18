@@ -6,7 +6,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -71,7 +70,7 @@ public class SheetManipulation implements ISheetManipulation {
      * @param dayOfMonth   current month day as int
      * @return
      */
-    private static byte[] handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
+    private static void handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
         try {
             //return system username
             String userSystem = System.getProperty("user.name");
@@ -85,20 +84,11 @@ public class SheetManipulation implements ISheetManipulation {
                 filePath = createDirToLinux.createDirToSheet(currentMonth, userSystem);
             }
 
-
             //creating sheet to current day
             FileOutputStream out = new FileOutputStream(filePath + "Dia_" + dayOfMonth + ".xls");
             workbook.write(out);
             out.close();
             System.out.println("Arquivo Excel criado com sucesso!");
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            workbook.write(bos);
-
-
-            return bos.toByteArray();
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("Arquivo não encontrado!");
@@ -106,11 +96,10 @@ public class SheetManipulation implements ISheetManipulation {
             e.printStackTrace();
             System.out.println("Erro na edição do arquivo!");
         }
-        return new byte[0];
     }
 
     @Override
-    public byte[] createSheet(List<Student> students) {
+    public void createSheet(List<Student> students) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         String currentMonth = LocalDate.now().getMonth().toString();
         int dayOfMonth = LocalDate.now().getDayOfMonth();
@@ -118,7 +107,7 @@ public class SheetManipulation implements ISheetManipulation {
 
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        return handleCreateSheet(workbook, currentMonth, dayOfMonth);
+        handleCreateSheet(workbook, currentMonth, dayOfMonth);
     }
 
     @Override

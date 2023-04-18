@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ISheetManipulation {
-    byte[] createSheet(List<Student> students);
+    void createSheet(List<Student> students);
 
     void createSheet(List<Student> students, LocalDate localDate);
 }
