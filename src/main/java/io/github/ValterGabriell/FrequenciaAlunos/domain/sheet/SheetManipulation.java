@@ -6,12 +6,15 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SheetManipulation extends SheetManipulationAbstraction {
+public class SheetManipulation implements ISheetManipulation {
     /**
      * create headers for sheet student - NAME, CPF, DATE, PRESENT
      *
@@ -75,9 +78,11 @@ public class SheetManipulation extends SheetManipulationAbstraction {
             String osName = System.getProperty("os.name").toLowerCase();
             String filePath = "";
             if (osName.contains("windows")) {
-                filePath = createDirToSheetOnWindows(currentMonth, userSystem);
+                CreateDirToWindows createDirToWindows = new CreateDirToWindows();
+                filePath = createDirToWindows.createDirToSheet(currentMonth, userSystem);
             } else if (osName.contains("linux")) {
-                filePath = createDirToSheetOnLinux(currentMonth, userSystem);
+                CreateDirToLinux createDirToLinux = new CreateDirToLinux();
+                filePath = createDirToLinux.createDirToSheet(currentMonth, userSystem);
             }
 
 
@@ -102,22 +107,6 @@ public class SheetManipulation extends SheetManipulationAbstraction {
             System.out.println("Erro na edição do arquivo!");
         }
         return new byte[0];
-    }
-
-    private static String createDirToSheetOnLinux(String currentMonth, String userSystem) {
-        //creating dir on desktop
-        String filePath = "/home/" + userSystem + "/Desktop/" + currentMonth + " - planilha/";
-        File directory = new File(filePath);
-        directory.mkdirs();
-        return filePath;
-    }
-
-    private static String createDirToSheetOnWindows(String currentMonth, String userSystem) {
-        //creating dir on desktop
-        String filePath = "C:\\Users\\" + userSystem + "\\Desktop\\" + currentMonth + " - planilha\\";
-        File directory = new File(filePath);
-        directory.mkdirs();
-        return filePath;
     }
 
     @Override
