@@ -1,6 +1,7 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.sheet;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
+import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SheetManipulation {
-    private static final String fileName = "C:/teste/teste.xls";
-
     private static void createHeadersOfColumns(HSSFSheet sheetAlunos) {
         List<String> columnTitle = new ArrayList<>();
         columnTitle.add("ALUNO ID");
@@ -54,13 +53,22 @@ public class SheetManipulation {
         }
     }
 
-    private static void handleCreateSheet(HSSFWorkbook workbook) {
+    private static void handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
         try {
-            FileOutputStream out = new FileOutputStream(new File(SheetManipulation.fileName));
-            workbook.write(out);
-            out.close();
-            System.out.println("Arquivo Excel criado com sucesso!");
-
+            //return system username
+            String userSystem = System.getProperty("user.name");
+            //creating dir on desktop
+            String filePath = "C:\\Users\\" + userSystem + "\\Desktop\\" + currentMonth + " - planilha\\";
+            File directory = new File(filePath);
+            boolean isDirCreated = directory.mkdirs();
+            if (isDirCreated) {
+                FileOutputStream out = new FileOutputStream(filePath + "Dia_" + dayOfMonth + ".xls");
+                workbook.write(out);
+                out.close();
+                System.out.println("Arquivo Excel criado com sucesso!");
+            } else {
+                throw new RequestExceptions("Falha ao criar diretório");
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("Arquivo não encontrado!");
@@ -70,22 +78,26 @@ public class SheetManipulation {
         }
     }
 
-    public void createSheet(List<Student> students) throws FileNotFoundException {
+    public void createSheet(List<Student> students) {
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheetAlunos = workbook.createSheet(LocalDate.now().getDayOfMonth() + " " + LocalDate.now().getMonth().toString() + " - PRESENÇA");
+        String currentMonth = LocalDate.now().getMonth().toString();
+        int dayOfMonth = LocalDate.now().getDayOfMonth();
+        HSSFSheet sheetAlunos = workbook.createSheet(dayOfMonth + " " + currentMonth + " - PRESENÇA");
 
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        handleCreateSheet(workbook);
+        handleCreateSheet(workbook, currentMonth, dayOfMonth);
     }
 
-    public void createSheet(List<Student> students, LocalDate localDate) throws FileNotFoundException {
+    public void createSheet(List<Student> students, LocalDate localDate) {
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheetAlunos = workbook.createSheet(localDate.getDayOfMonth() + " " + localDate.getMonth().toString() + " - PRESENÇA");
+        String currentMonth = localDate.getMonth().toString();
+        int dayOfMonth = localDate.getDayOfMonth();
+        HSSFSheet sheetAlunos = workbook.createSheet(dayOfMonth + " " + currentMonth + " - PRESENÇA");
 
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        handleCreateSheet(workbook);
+        handleCreateSheet(workbook, currentMonth, dayOfMonth);
     }
 
 }
