@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FrequencyService extends StudentValidation {
@@ -78,10 +79,20 @@ public class FrequencyService extends StudentValidation {
         return responseDaysThatStudentGoToClass;
     }
 
-    public void createSheet() throws FileNotFoundException {
+    public void createSheetForCurrentDay() throws FileNotFoundException {
         List<Student> students = studentsRepository.findAll();
         SheetManipulation sheetManipulation = new SheetManipulation();
         sheetManipulation.createSheet(students);
+    }
+
+    public void returnSheetForSpecifyDay(LocalDate date) throws FileNotFoundException {
+        List<Student> students = studentsRepository
+                .findAll()
+                .stream()
+                .filter(student -> student.getFrequency().getDaysList().stream().anyMatch(_date -> _date.getDate().equals(date)))
+                .collect(Collectors.toList());
+        SheetManipulation sheetManipulation = new SheetManipulation();
+        sheetManipulation.createSheet(students, date);
     }
 
 }

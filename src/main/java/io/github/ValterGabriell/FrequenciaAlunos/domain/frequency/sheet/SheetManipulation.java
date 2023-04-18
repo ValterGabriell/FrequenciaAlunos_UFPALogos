@@ -1,7 +1,5 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.sheet;
 
-import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
-import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -19,29 +17,7 @@ import java.util.List;
 public class SheetManipulation {
     private static final String fileName = "C:/teste/teste.xls";
 
-    private static Student createStudent(String cpf) {
-        Student student = new Student();
-        student.setCpf(cpf);
-
-        Frequency frequency = new Frequency();
-        frequency.setId(student.getCpf());
-
-        Days days = new Days();
-        days.setDate(LocalDate.now());
-        days.setFrequency(frequency);
-        List<Days> daysList = new ArrayList<>();
-        daysList.add(days);
-
-        frequency.setDaysList(daysList);
-
-        student.setFrequency(frequency);
-        return student;
-    }
-
-    public void createSheet(List<Student> students) throws FileNotFoundException {
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheetAlunos = workbook.createSheet(LocalDate.now().getDayOfMonth() + " " + LocalDate.now().getMonth().toString() + " - PRESENÇA");
-
+    private static void createHeadersOfColumns(HSSFSheet sheetAlunos) {
         List<String> columnTitle = new ArrayList<>();
         columnTitle.add("ALUNO ID");
         columnTitle.add("ALUNO NOME");
@@ -54,7 +30,9 @@ public class SheetManipulation {
             Cell cell = row.createCell(cellnumber++);
             cell.setCellValue(value);
         }
+    }
 
+    private static void createColumnsWithFields(List<Student> students, HSSFSheet sheetAlunos) {
         int rownumber = 1;
         int columnnumber = 0;
         for (Student student : students) {
@@ -74,8 +52,9 @@ public class SheetManipulation {
 
             columnnumber = 0;
         }
+    }
 
-
+    private static void handleCreateSheet(HSSFWorkbook workbook) {
         try {
             FileOutputStream out = new FileOutputStream(new File(SheetManipulation.fileName));
             workbook.write(out);
@@ -91,16 +70,22 @@ public class SheetManipulation {
         }
     }
 
-    private List<Student> mockStudents() {
-        Student student = createStudent("03856573232");
-        Student student1 = createStudent("03856573231");
-        Student student2 = createStudent("03856573233");
+    public void createSheet(List<Student> students) throws FileNotFoundException {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheetAlunos = workbook.createSheet(LocalDate.now().getDayOfMonth() + " " + LocalDate.now().getMonth().toString() + " - PRESENÇA");
 
-        List<Student> list = new ArrayList<>();
-        list.add(student);
-        list.add(student1);
-        list.add(student2);
-
-        return list;
+        createHeadersOfColumns(sheetAlunos);
+        createColumnsWithFields(students, sheetAlunos);
+        handleCreateSheet(workbook);
     }
+
+    public void createSheet(List<Student> students, LocalDate localDate) throws FileNotFoundException {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheetAlunos = workbook.createSheet(localDate.getDayOfMonth() + " " + localDate.getMonth().toString() + " - PRESENÇA");
+
+        createHeadersOfColumns(sheetAlunos);
+        createColumnsWithFields(students, sheetAlunos);
+        handleCreateSheet(workbook);
+    }
+
 }

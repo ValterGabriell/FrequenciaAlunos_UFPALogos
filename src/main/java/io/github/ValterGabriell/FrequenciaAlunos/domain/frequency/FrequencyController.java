@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("frequency")
@@ -32,8 +33,14 @@ public class FrequencyController {
     }
 
     @GetMapping(value = "sheet")
-    public ResponseEntity<?> createSheet() throws FileNotFoundException {
-        frequencyService.createSheet();
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity createSheet() throws FileNotFoundException {
+        frequencyService.createSheetForCurrentDay();
+        return ResponseEntity.status(HttpStatus.OK).body("OK!");
+    }
+
+    @GetMapping(value = "sheet", params = {"date"})
+    public ResponseEntity getSheetForSpecifyDay(@RequestParam LocalDate date) throws FileNotFoundException {
+        frequencyService.returnSheetForSpecifyDay(date);
+        return ResponseEntity.status(HttpStatus.OK).body("OK!");
     }
 }
