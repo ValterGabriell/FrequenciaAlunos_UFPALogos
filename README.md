@@ -130,7 +130,7 @@ todo
 {
 	"studentId": "233456789",
 	"frequencyId": "233456789",
-	"daysListThatStudentGoToClass": [
+	"daysListThatStudentGoToClasses": [
 		{
 			"date": "2023-04-12"
 		}

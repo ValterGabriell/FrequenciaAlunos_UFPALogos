@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+
 @RestController
 @RequestMapping("frequency")
 public class FrequencyController {
@@ -27,5 +29,11 @@ public class FrequencyController {
     public ResponseEntity<ResponseDaysThatStudentGoToClass> getListOfDays(@RequestParam String studentId) throws RequestExceptions {
         ResponseDaysThatStudentGoToClass listOfDaysByFrequencyId = frequencyService.getListOfDaysByFrequencyId(studentId);
         return new ResponseEntity<>(listOfDaysByFrequencyId, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "sheet")
+    public ResponseEntity<?> createSheet() throws FileNotFoundException {
+        frequencyService.createSheet();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

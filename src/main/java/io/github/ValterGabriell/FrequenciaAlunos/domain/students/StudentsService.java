@@ -18,7 +18,7 @@ public class StudentsService {
         this.studentsRepository = studentsRepository;
     }
 
-    public Student insertStudentIntoDatabase(InsertStudents request)  {
+    public Student insertStudentIntoDatabase(InsertStudents request) {
 
         if (request.getCpf().length() != 11) {
             throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
@@ -30,9 +30,7 @@ public class StudentsService {
         student.setFrequency(frequency);
         studentsRepository.save(student);
         return student;
-
-
-}
+    }
 
     public List<Student> getAllStudentsFromDatabase() {
         return studentsRepository.findAll();

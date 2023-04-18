@@ -5,7 +5,6 @@ import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 public class Days {

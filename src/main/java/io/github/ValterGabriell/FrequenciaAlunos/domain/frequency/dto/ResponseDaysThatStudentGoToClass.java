@@ -6,14 +6,14 @@ import java.util.List;
 
 public class ResponseDaysThatStudentGoToClass {
     private String studentId;
-    private List<Days> daysListThatStudentGoToClass;
+    private List<Days> daysListThatStudentGoToClasses;
 
     public ResponseDaysThatStudentGoToClass() {
     }
 
-    public ResponseDaysThatStudentGoToClass(String studentId, List<Days> daysListThatStudentGoToClass) {
+    public ResponseDaysThatStudentGoToClass(String studentId, List<Days> daysListThatStudentGoToClasses) {
         this.studentId = studentId;
-        this.daysListThatStudentGoToClass = daysListThatStudentGoToClass;
+        this.daysListThatStudentGoToClasses = daysListThatStudentGoToClasses;
     }
 
 
@@ -26,10 +26,10 @@ public class ResponseDaysThatStudentGoToClass {
     }
 
     public List<Days> getDaysListThatStudentGoToClass() {
-        return daysListThatStudentGoToClass;
+        return daysListThatStudentGoToClasses;
     }
 
-    public void setDaysListThatStudentGoToClass(List<Days> daysListThatStudentGoToClass) {
-        this.daysListThatStudentGoToClass = daysListThatStudentGoToClass;
+    public void setDaysListThatStudentGoToClass(List<Days> daysListThatStudentGoToClasses) {
+        this.daysListThatStudentGoToClasses = daysListThatStudentGoToClasses;
     }
 }

@@ -9,7 +9,6 @@ import java.util.Optional;
 public class StudentValidation {
 
     public static Student validateIfStudentExistsAndReturnIfExist(StudentsRepository studentsRepository, String studentId) {
-
         Optional<Student> student = studentsRepository.findById(studentId);
         if (student.isEmpty()) {
             throw new RequestExceptions(ExceptionsValues.USER_NOT_FOUND + " " + studentId);
