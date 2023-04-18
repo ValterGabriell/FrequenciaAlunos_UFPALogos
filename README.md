@@ -106,7 +106,24 @@ http://localhost:8080/
 <h3>Resposta esperada</h3></br>
 
 ```
-todo
+[
+	{
+		"cpf": "42345678912",
+		"username": "silva"
+	},
+	{
+		"cpf": "12345678912",
+		"username": "gabriel"
+	},
+	{
+		"cpf": "32345678912",
+		"username": "gabriel"
+	},
+	{
+		"cpf": "62345678912",
+		"username": "brito"
+	}
+]
 
 ```
 
@@ -138,6 +155,58 @@ todo
 }
 
 ```
+
+
+
+<h2>Exportar tabela do excel</h2>
+<p>No momento a tabela é exportada apenas para a máquina, sendo salva na pasta C:/teste/teste.xls. É necessário criar esse caminho e arquivo para funcionar</p>
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+  </tr>
+  <tr>
+    <td>/frequency/sheet</td>
+    <td>Exporta tabela do dia atual</td>
+  </tr>
+</table>
+
+<h3>Resposta esperada</h3></br>
+
+```
+OK! 
+
+verificar na pasta se um arquivo chamado "teste" foi criado, além do que você criou
+
+```
+
+
+<h2>Exportar tabela do excel para dia específico</h2>
+<p>No momento a tabela é exportada apenas para a máquina, sendo salva na pasta C:/teste/teste.xls. É necessário criar esse caminho e arquivo para funcionar</p>
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+    <th>Query</th>
+  </tr>
+  <tr>
+    <td>/frequency/sheet</td>
+    <td>Exporta tabela do dia específico</td>
+    <td>date (AAAA-MM-DD)</td>
+  </tr>
+</table>
+
+<h3>Resposta esperada</h3></br>
+
+```
+OK! 
+
+verificar na pasta se um arquivo chamado "teste" foi criado, além do que você criou
+
+```
+
+
+
 
 
 <h2>Gerar QRCode para validação</h2>
