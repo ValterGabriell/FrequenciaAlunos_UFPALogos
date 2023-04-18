@@ -1,7 +1,6 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.sheet;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -73,10 +72,14 @@ public class SheetManipulation extends SheetManipulationAbstraction {
         try {
             //return system username
             String userSystem = System.getProperty("user.name");
-            //creating dir on desktop
-            String filePath = "C:\\Users\\" + userSystem + "\\Desktop\\" + currentMonth + " - planilha\\";
-            File directory = new File(filePath);
-            directory.mkdirs();
+            String osName = System.getProperty("os.name").toLowerCase();
+            String filePath = "";
+            if (osName.contains("windows")) {
+                filePath = createDirToSheetOnWindows(currentMonth, userSystem);
+            } else if (osName.contains("linux")) {
+                filePath = createDirToSheetOnLinux(currentMonth, userSystem);
+            }
+
 
             //creating sheet to current day
             FileOutputStream out = new FileOutputStream(filePath + "Dia_" + dayOfMonth + ".xls");
@@ -99,6 +102,22 @@ public class SheetManipulation extends SheetManipulationAbstraction {
             System.out.println("Erro na edição do arquivo!");
         }
         return new byte[0];
+    }
+
+    private static String createDirToSheetOnLinux(String currentMonth, String userSystem) {
+        //creating dir on desktop
+        String filePath = "/home/" + userSystem + "/Desktop/" + currentMonth + " - planilha/";
+        File directory = new File(filePath);
+        directory.mkdirs();
+        return filePath;
+    }
+
+    private static String createDirToSheetOnWindows(String currentMonth, String userSystem) {
+        //creating dir on desktop
+        String filePath = "C:\\Users\\" + userSystem + "\\Desktop\\" + currentMonth + " - planilha\\";
+        File directory = new File(filePath);
+        directory.mkdirs();
+        return filePath;
     }
 
     @Override

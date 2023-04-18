@@ -3,7 +3,7 @@ package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseDaysThatStudentGoToClass;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseValidateFrequency;
-import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.sheet.SheetManipulation;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.sheet.SheetManipulation;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.StudentValidation;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
