@@ -15,7 +15,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SheetManipulation {
+public class SheetManipulation extends SheetManipulationAbstraction{
+    /**
+     * create headers for sheet student - NAME, CPF, DATE, PRESENT
+     * @param sheetAlunos sheet
+     */
     private static void createHeadersOfColumns(HSSFSheet sheetAlunos) {
         List<String> columnTitle = new ArrayList<>();
         columnTitle.add("ALUNO ID");
@@ -31,6 +35,11 @@ public class SheetManipulation {
         }
     }
 
+    /**
+     * fill the sheet with students data
+     * @param students current student to insert on sheet
+     * @param sheetAlunos sheet
+     */
     private static void createColumnsWithFields(List<Student> students, HSSFSheet sheetAlunos) {
         int rownumber = 1;
         int columnnumber = 0;
@@ -53,6 +62,12 @@ public class SheetManipulation {
         }
     }
 
+    /**
+     * method to create sheet on current PC
+     * @param workbook specify type to work with sheets
+     * @param currentMonth current month as string
+     * @param dayOfMonth current month day as int
+     */
     private static void handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
         try {
             //return system username
@@ -78,6 +93,7 @@ public class SheetManipulation {
         }
     }
 
+    @Override
     public void createSheet(List<Student> students) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         String currentMonth = LocalDate.now().getMonth().toString();
@@ -89,6 +105,7 @@ public class SheetManipulation {
         handleCreateSheet(workbook, currentMonth, dayOfMonth);
     }
 
+    @Override
     public void createSheet(List<Student> students, LocalDate localDate) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         String currentMonth = localDate.getMonth().toString();
