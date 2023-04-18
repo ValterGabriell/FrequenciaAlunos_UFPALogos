@@ -6,6 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public abstract class SheetManipulationAbstraction {
-    public abstract void createSheet(List<Student> students);
+    public abstract byte[] createSheet(List<Student> students);
     public abstract void createSheet(List<Student> students, LocalDate localDate);
 }

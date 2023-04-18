@@ -1,23 +1,21 @@
-package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.sheet;
+package io.github.ValterGabriell.FrequenciaAlunos.domain.sheet;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
-import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SheetManipulation extends SheetManipulationAbstraction{
+public class SheetManipulation extends SheetManipulationAbstraction {
     /**
      * create headers for sheet student - NAME, CPF, DATE, PRESENT
+     *
      * @param sheetAlunos sheet
      */
     private static void createHeadersOfColumns(HSSFSheet sheetAlunos) {
@@ -37,7 +35,8 @@ public class SheetManipulation extends SheetManipulationAbstraction{
 
     /**
      * fill the sheet with students data
-     * @param students current student to insert on sheet
+     *
+     * @param students    current student to insert on sheet
      * @param sheetAlunos sheet
      */
     private static void createColumnsWithFields(List<Student> students, HSSFSheet sheetAlunos) {
@@ -64,26 +63,34 @@ public class SheetManipulation extends SheetManipulationAbstraction{
 
     /**
      * method to create sheet on current PC
-     * @param workbook specify type to work with sheets
+     *
+     * @param workbook     specify type to work with sheets
      * @param currentMonth current month as string
-     * @param dayOfMonth current month day as int
+     * @param dayOfMonth   current month day as int
+     * @return
      */
-    private static void handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
+    private static byte[] handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
         try {
             //return system username
             String userSystem = System.getProperty("user.name");
             //creating dir on desktop
             String filePath = "C:\\Users\\" + userSystem + "\\Desktop\\" + currentMonth + " - planilha\\";
             File directory = new File(filePath);
-            boolean isDirCreated = directory.mkdirs();
-            if (isDirCreated) {
-                FileOutputStream out = new FileOutputStream(filePath + "Dia_" + dayOfMonth + ".xls");
-                workbook.write(out);
-                out.close();
-                System.out.println("Arquivo Excel criado com sucesso!");
-            } else {
-                throw new RequestExceptions("Falha ao criar diretório");
-            }
+            directory.mkdirs();
+
+            //creating sheet to current day
+            FileOutputStream out = new FileOutputStream(filePath + "Dia_" + dayOfMonth + ".xls");
+            workbook.write(out);
+            out.close();
+            System.out.println("Arquivo Excel criado com sucesso!");
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            workbook.write(bos);
+
+
+            return bos.toByteArray();
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("Arquivo não encontrado!");
@@ -91,10 +98,11 @@ public class SheetManipulation extends SheetManipulationAbstraction{
             e.printStackTrace();
             System.out.println("Erro na edição do arquivo!");
         }
+        return new byte[0];
     }
 
     @Override
-    public void createSheet(List<Student> students) {
+    public byte[] createSheet(List<Student> students) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         String currentMonth = LocalDate.now().getMonth().toString();
         int dayOfMonth = LocalDate.now().getDayOfMonth();
@@ -102,7 +110,7 @@ public class SheetManipulation extends SheetManipulationAbstraction{
 
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        handleCreateSheet(workbook, currentMonth, dayOfMonth);
+        return handleCreateSheet(workbook, currentMonth, dayOfMonth);
     }
 
     @Override
