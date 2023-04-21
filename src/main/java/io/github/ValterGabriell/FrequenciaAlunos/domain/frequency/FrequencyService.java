@@ -104,6 +104,7 @@ public class FrequencyService extends StudentValidation {
 
         Days day = new Days();
         day.setDate(date);
+        day.setJustified(true);
         frequency.getDaysList().add(day);
 
         studentsRepository.save(student);

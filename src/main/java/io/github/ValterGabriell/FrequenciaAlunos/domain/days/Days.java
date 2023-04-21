@@ -13,10 +13,18 @@ public class Days {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private LocalDate date;
+    private boolean justified;
 
     public Days() {
     }
 
+    public boolean isJustified() {
+        return justified;
+    }
+
+    public void setJustified(boolean justified) {
+        this.justified = justified;
+    }
 
     @JsonIgnore
     public String getId() {
