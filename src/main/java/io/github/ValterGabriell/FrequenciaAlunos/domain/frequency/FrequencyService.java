@@ -11,7 +11,6 @@ import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +23,17 @@ public class FrequencyService extends StudentValidation {
 
     public FrequencyService(StudentsRepository studentsRepository) {
         this.studentsRepository = studentsRepository;
+    }
+
+    private static void verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(Frequency frequency, LocalDate parameterDate) {
+        /*
+          throw erro if try to validate same day twice
+         */
+        frequency.getDaysList().forEach(days -> {
+            if (days.getDate().equals(parameterDate)) {
+                throw new RequestExceptions(ExceptionsValues.STUDENT_ALREADY_VALIDATED);
+            }
+        });
     }
 
     /**
@@ -41,17 +51,9 @@ public class FrequencyService extends StudentValidation {
         Frequency frequency = student.getFrequency();
 
         Days currentDays = new Days();
-        currentDays.setFrequency(frequency);
         currentDays.setDate(LocalDate.now());
 
-        /**
-         * throw erro if try validate same day twice
-         */
-        frequency.getDaysList().forEach(days -> {
-            if (days.getDate().equals(LocalDate.now())) {
-                throw new RequestExceptions(ExceptionsValues.STUDENT_ALREADY_VALIDATED);
-            }
-        });
+        verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(frequency, LocalDate.now());
 
         frequency.getDaysList().add(currentDays);
 
@@ -79,13 +81,13 @@ public class FrequencyService extends StudentValidation {
         return responseDaysThatStudentGoToClass;
     }
 
-    public void createSheetForCurrentDay() throws FileNotFoundException {
+    public void createSheetForCurrentDay() {
         List<Student> students = studentsRepository.findAll();
         SheetManipulation sheetManipulation = new SheetManipulation();
         sheetManipulation.createSheet(students);
     }
 
-    public void returnSheetForSpecifyDay(LocalDate date) throws FileNotFoundException {
+    public void returnSheetForSpecifyDay(LocalDate date) {
         List<Student> students = studentsRepository
                 .findAll()
                 .stream()
@@ -93,6 +95,23 @@ public class FrequencyService extends StudentValidation {
                 .collect(Collectors.toList());
         SheetManipulation sheetManipulation = new SheetManipulation();
         sheetManipulation.createSheet(students, date);
+    }
+
+    public ResponseValidateFrequency justifyAbsence(LocalDate date, String cpf) {
+        Student student = studentsRepository.findById(cpf).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
+        Frequency frequency = student.getFrequency();
+        verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(frequency, date);
+
+        Days day = new Days();
+        day.setDate(date);
+        frequency.getDaysList().add(day);
+
+        studentsRepository.save(student);
+
+        ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
+        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " justificada! - Dia: " + LocalDate.now());
+        return responseValidateFrequency;
+
     }
 
 }

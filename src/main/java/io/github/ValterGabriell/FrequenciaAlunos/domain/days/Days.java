@@ -14,18 +14,6 @@ public class Days {
     private String id;
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
-    private Frequency frequency;
-
-    public Frequency getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(Frequency frequency) {
-        this.frequency = frequency;
-    }
-
     public Days() {
     }
 
