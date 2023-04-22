@@ -78,13 +78,36 @@ http://localhost:8080/
 
 ```bash
 {
-	"cpf": "233456789",
-	"username": "valter",
-	"frequency": {
-		"id": "233456789"
-	}
+	"message": "Frequência para brito válidada! - Dia: 2023-04-21"
 }
 ```
+
+<h2>Justificar falta e adicionar o dia na frequencia do estudante</h2>
+
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+    <th>Query</th>
+    <th>Query</th>
+  </tr>
+  <tr>
+    <td>/frequency</td>
+    <td>realizar a validação de frequencia de um estudante</td>
+    <td>studentId</td>
+    <td>date</td>
+  </tr> 
+  </table>
+ 
+
+<h3>Resposta esperada</h3></br>
+
+```bash
+{
+	"message": "Frequência para brito justificada! - Dia: 2023-04-21"
+}
+```
+
 
 
 
@@ -145,14 +168,20 @@ http://localhost:8080/
 
 ```
 {
-	"studentId": "233456789",
-	"frequencyId": "233456789",
-	"daysListThatStudentGoToClasses": [
+	"studentId": "62345678912",
+	"daysListThatStudentGoToClass": [
 		{
-			"date": "2023-04-12"
+			"date": "2023-04-21",
+			"justified": false
+		},
+		{
+			"date": "2023-04-15",
+			"justified": true
 		}
 	]
 }
+
+Quando justified for false, significa que o aluno foi para a aula no dia em questão, quando for true, significa que o aluno faltou, porém a sua falta foi justificada.
 
 ```
 
