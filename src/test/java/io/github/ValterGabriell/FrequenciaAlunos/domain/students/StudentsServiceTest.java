@@ -26,6 +26,12 @@ class StudentsServiceTest {
     }
 
     @Test
+    @DisplayName("A cpf should be not null and return true when it is")
+    void isCpfNotNull_ReturnTrue_WhenUsernameIsNotNull() {
+        Assertions.assertTrue(studentCpfTest.cpfIsNull());
+    }
+
+    @Test
     @DisplayName("A username should have only letters and no numbers")
     void isUsernameOnlyLetters() {
         Assertions.assertTrue(studentUsernameTest.usernameHasContainsOnlyLetters());

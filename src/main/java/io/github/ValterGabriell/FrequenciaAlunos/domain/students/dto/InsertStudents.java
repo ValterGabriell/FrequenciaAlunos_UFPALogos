@@ -25,6 +25,14 @@ public class InsertStudents {
         return true;
     }
 
+    public boolean cpfIsNull() {
+        boolean isUsernameNotNull = !getCpf().isEmpty() && !getCpf().isBlank();
+        if (!isUsernameNotNull){
+            throw new RequestExceptions(ExceptionsValues.CPF_NULL);
+        }
+        return true;
+    }
+
     public boolean usernameHasToBeMoreThan2Chars() {
         boolean isUsernameLenghtOk = getUsername().length() > 2;
         if (!isUsernameLenghtOk){
@@ -43,7 +51,6 @@ public class InsertStudents {
     }
 
     public boolean isCpfHave11chars() {
-
         boolean isCpfLenghtOk = getCpf().length() == 11;
         if (!isCpfLenghtOk){
             throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
