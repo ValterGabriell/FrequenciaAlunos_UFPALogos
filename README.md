@@ -8,6 +8,7 @@ Este é um projeto que deve automatizar o sistema de frequência de alunos no cu
 <!--ts-->
    * [Como usar?](#como-usar)
    * [Endpoints](#endpoints)
+   * [Testes](#testes)
    * [Creditos](#creditos)
 <!--te-->
   
@@ -257,6 +258,125 @@ verificar na pasta se um arquivo chamado "teste" foi criado, além do que você 
 ![image](https://user-images.githubusercontent.com/63808405/232524532-3a0ce398-9446-4969-b300-fcfcb28d60e0.png)
 
 </br>
+
+
+
+
+<h1>Testes</h1>
+
+<h3>O nome de usuário não pode ser nulo</h3></br>
+
+```
+   @Test
+    @DisplayName("A username should be not null and return true when it is")
+    void isUsernameNotNull_ReturnTrue_WhenUsernameIsNotNull() {
+        Assertions.assertTrue(studentUsernameTest.usernameIsNull());
+    }
+    
+
+    
+        public boolean usernameIsNull() {
+        boolean isUsernameNotNull = !getUsername().isEmpty() && !getUsername().isBlank();
+        if (!isUsernameNotNull){
+            throw new RequestExceptions(ExceptionsValues.USERNAME_NULL);
+        }
+        return true;
+    }
+    
+```
+
+
+<h3>O nome de usuário precisa ter mais de 2 caracteres</h3></br>
+
+```
+    @Test
+    @DisplayName("A username should have more than 2 characters and return true when it is")
+    void isUsernameBiggerThan2Chars() {
+        Assertions.assertTrue(studentUsernameTest.usernameHasToBeMoreThan2Chars());
+    }
+
+    
+
+    
+  public boolean usernameHasToBeMoreThan2Chars() {
+        boolean isUsernameLenghtOk = getUsername().length() > 2;
+        if (!isUsernameLenghtOk){
+            throw new RequestExceptions(ExceptionsValues.USERNAME_ILLEGAL_LENGHT);
+        }
+        return true;
+    }
+```
+
+
+
+<h3>O nome de usuário precisa ter apenas letras</h3></br>
+
+```
+    @Test
+    @DisplayName("A username should have only letters and no numbers")
+    void isUsernameOnlyLetters() {
+        Assertions.assertTrue(studentUsernameTest.usernameHasContainsOnlyLetters());
+    }
+
+
+    
+
+    
+    public boolean usernameHasContainsOnlyLetters() {
+        String regex = "^[a-zA-Z]+$";
+        boolean isUsernameLenghtOk = getUsername().matches(regex);
+        if (!isUsernameLenghtOk){
+            throw new RequestExceptions(ExceptionsValues.USERNAME_ILLEGAL_CHARS);
+        }
+        return true;
+    }
+```
+
+
+<h3>O CPF precisa ter exatamente 11 digitos</h3></br>
+
+```
+    @Test
+    @DisplayName("cpf should have exactly 11 characters and return true when it is")
+    void cpfLenght() {
+        Assertions.assertTrue(studentCpfTest.isCpfHave11chars());
+    }
+    
+    public boolean isCpfHave11chars() {
+        boolean isCpfLenghtOk = getCpf().length() == 11;
+        if (!isCpfLenghtOk){
+            throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
+        }
+        return true;
+    }
+```
+
+
+<h3>O CPF não pode ser nulo</h3></br>
+
+```
+    @Test
+    @DisplayName("A cpf should be not null and return true when it is")
+    void isCpfNotNull_ReturnTrue_WhenUsernameIsNotNull() {
+        Assertions.assertTrue(studentCpfTest.cpfIsNull());
+    }
+
+    
+    public boolean cpfIsNull() {
+        boolean isUsernameNotNull = !getCpf().isEmpty() && !getCpf().isBlank();
+        if (!isUsernameNotNull){
+            throw new RequestExceptions(ExceptionsValues.CPF_NULL);
+        }
+        return true;
+    }
+```
+
+
+
+
+
+
+
 
 <h1>Créditos</h1>
 
