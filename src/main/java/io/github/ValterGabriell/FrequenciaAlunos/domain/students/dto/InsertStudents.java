@@ -33,6 +33,15 @@ public class InsertStudents {
         return true;
     }
 
+    public boolean usernameHasContainsOnlyLetters() {
+        String regex = "^[a-zA-Z]+$";
+        boolean isUsernameLenghtOk = getUsername().matches(regex);
+        if (!isUsernameLenghtOk){
+            throw new RequestExceptions(ExceptionsValues.USERNAME_ILLEGAL_CHARS);
+        }
+        return true;
+    }
+
     public boolean isCpfHave11chars() {
 
         boolean isCpfLenghtOk = getCpf().length() == 11;

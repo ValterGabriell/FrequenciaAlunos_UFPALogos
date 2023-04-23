@@ -18,7 +18,7 @@ public class StudentsService {
 
     public Student insertStudentIntoDatabase(InsertStudents request) {
         Student student = request.toModel();
-        if (request.usernameIsNull() && request.isCpfHave11chars() && request.usernameHasToBeMoreThan2Chars()) {
+        if (request.usernameIsNull() && request.isCpfHave11chars() && request.usernameHasToBeMoreThan2Chars() && request.usernameHasContainsOnlyLetters()) {
             Frequency frequency = new Frequency();
             frequency.setDaysList(new ArrayList<>());
             frequency.setId(request.getCpf());

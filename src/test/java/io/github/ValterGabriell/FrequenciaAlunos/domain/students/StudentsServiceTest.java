@@ -26,6 +26,12 @@ class StudentsServiceTest {
     }
 
     @Test
+    @DisplayName("A username should have only letters and no numbers")
+    void isUsernameOnlyLetters() {
+        Assertions.assertTrue(studentUsernameTest.usernameHasContainsOnlyLetters());
+    }
+
+    @Test
     @DisplayName("A username should have more than 2 characters and return true when it is")
     void isUsernameBiggerThan2Chars() {
         Assertions.assertTrue(studentUsernameTest.usernameHasToBeMoreThan2Chars());
