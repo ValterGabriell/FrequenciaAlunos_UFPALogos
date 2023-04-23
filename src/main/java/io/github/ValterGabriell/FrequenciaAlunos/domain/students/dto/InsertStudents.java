@@ -1,12 +1,12 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.students.dto;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
-import jakarta.annotation.Nonnull;
+import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
+import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 
 public class InsertStudents {
-    @Nonnull
     private String cpf;
-    @Nonnull
+
     private String username;
 
     public InsertStudents(String cpf, String username) {
@@ -15,6 +15,31 @@ public class InsertStudents {
     }
 
     public InsertStudents() {
+    }
+
+    public boolean usernameIsNull() {
+        boolean isUsernameNotNull = !getUsername().isEmpty() && !getUsername().isBlank();
+        if (!isUsernameNotNull){
+            throw new RequestExceptions(ExceptionsValues.USERNAME_NULL);
+        }
+        return true;
+    }
+
+    public boolean usernameHasToBeMoreThan2Chars() {
+        boolean isUsernameLenghtOk = getUsername().length() > 2;
+        if (!isUsernameLenghtOk){
+            throw new RequestExceptions(ExceptionsValues.USERNAME_ILLEGAL_LENGHT);
+        }
+        return true;
+    }
+
+    public boolean isCpfHave11chars() {
+
+        boolean isCpfLenghtOk = getCpf().length() == 11;
+        if (!isCpfLenghtOk){
+            throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
+        }
+        return true;
     }
 
     public Student toModel() {
