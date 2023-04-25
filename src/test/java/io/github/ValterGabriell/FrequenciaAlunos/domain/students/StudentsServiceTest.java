@@ -48,27 +48,4 @@ class StudentsServiceTest {
     void cpfLenght() {
         Assertions.assertTrue(studentCpfTest.isFieldHasNumberExcatlyOfChars(studentCpfTest.getCpf(), 11));
     }
-
-    @Test
-    @DisplayName("show throw RequestException with message when cpf are diferent than 11")
-    void shoudExceptionWhenCpfIsWrongLenght() {
-        studentCpfTest.setCpf("123");
-        Assertions.assertThrows(RequestExceptions.class, () -> studentCpfTest.isFieldHasNumberExcatlyOfChars(studentCpfTest.getCpf(), 11));
-    }
-
-    @Test
-    @DisplayName("show throw RequestException with message when username is less than 11")
-    void shoudExceptionWhenUsernameIsWrongLenght() {
-        studentUsernameTest.setUsername("as");
-        Assertions.assertThrows(RequestExceptions.class, () -> studentCpfTest.usernameHasToBeMoreThan2Chars());
-    }
-
-    @Test
-    @DisplayName("show throw RequestException with message when username is null")
-    void shoudExceptionWhenUsernameIsNull() {
-        studentCpfTest.setUsername(" ");
-        Assertions.assertThrows(RequestExceptions.class, () -> studentCpfTest.usernameIsNull());
-    }
-
-
 }

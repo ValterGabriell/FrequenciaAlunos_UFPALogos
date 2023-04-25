@@ -21,5 +21,5 @@ public abstract class FieldValidation{
         return true;
     }
 
-    abstract boolean validateIfIsEmpty(String field, String exceptionMessage);
+    abstract boolean validateIfIsEmpty(String field, String exceptionMessage) throws RequestExceptions;
 }
