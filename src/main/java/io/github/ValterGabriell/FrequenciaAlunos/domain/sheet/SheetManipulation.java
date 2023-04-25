@@ -1,18 +1,20 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.sheet;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
+import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.*;
-import java.nio.file.Files;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SheetManipulation implements ISheetManipulation {
+public class SheetManipulation implements SheetManipulationContract {
     /**
      * create headers for sheet student - NAME, CPF, DATE, PRESENT
      *
@@ -63,45 +65,19 @@ public class SheetManipulation implements ISheetManipulation {
 
     /**
      * method to create sheet on current PC
-     *
      * @param workbook     specify type to work with sheets
-     * @param currentMonth current month as string
-     * @param dayOfMonth   current month day as int
      * @return
      */
-    private static byte[] handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
+    private static byte[] handleCreateSheet(HSSFWorkbook workbook) {
         try {
-            //return system username
-            String userSystem = System.getProperty("user.name");
-            String osName = System.getProperty("os.name").toLowerCase();
-            String filePath = "";
-
-            CreateDir createDir;
-            switch (osName) {
-                case "windows" -> {
-                    createDir = new CreateDirToWindows();
-                    filePath = createDir.createDirToSheet(currentMonth, userSystem);
-                }
-                case "linux" -> {
-                    createDir = new CreateDirToLinux();
-                    filePath = createDir.createDirToSheet(currentMonth, userSystem);
-                }
-            }
-
-            //creating sheet to current day
-            FileOutputStream out = new FileOutputStream(filePath + "Dia_" + dayOfMonth + ".xls");
-            workbook.write(out);
-            out.close();
-            File file = new File(filePath + "Dia_" + dayOfMonth + ".xls");
-            return Files.readAllBytes(file.toPath());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Arquivo não encontrado!");
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            workbook.write(byteArrayOutputStream);
+            byteArrayOutputStream.close();
+            return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Erro na edição do arquivo!");
+            throw new RequestExceptions("Erro interno na criação de planilha");
         }
-        return new byte[0];
     }
 
     @Override
@@ -112,11 +88,11 @@ public class SheetManipulation implements ISheetManipulation {
         HSSFSheet sheetAlunos = workbook.createSheet(dayOfMonth + " " + currentMonth + " - PRESENÇA");
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        return handleCreateSheet(workbook, currentMonth, dayOfMonth);
+        return handleCreateSheet(workbook);
     }
 
     @Override
-    public void createSheet(List<Student> students, LocalDate localDate) {
+    public byte[] createSheet(List<Student> students, LocalDate localDate) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         String currentMonth = localDate.getMonth().toString();
         int dayOfMonth = localDate.getDayOfMonth();
@@ -124,7 +100,7 @@ public class SheetManipulation implements ISheetManipulation {
 
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        handleCreateSheet(workbook, currentMonth, dayOfMonth);
+        return handleCreateSheet(workbook);
     }
 
 }

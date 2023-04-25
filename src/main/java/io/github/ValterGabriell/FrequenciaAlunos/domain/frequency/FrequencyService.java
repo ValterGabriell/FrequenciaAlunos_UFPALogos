@@ -4,6 +4,7 @@ import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseDaysThatStudentGoToClass;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseValidateFrequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.sheet.SheetManipulation;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.sheet.dto.ResponseSheet;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.StudentValidation;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
@@ -81,20 +82,26 @@ public class FrequencyService extends StudentValidation {
         return responseDaysThatStudentGoToClass;
     }
 
-    public byte[] createSheetForCurrentDay() {
+    public ResponseSheet createSheetForCurrentDay() {
         List<Student> students = studentsRepository.findAll();
         SheetManipulation sheetManipulation = new SheetManipulation();
-        return sheetManipulation.createSheet(students);
+        ResponseSheet responseSheet = new ResponseSheet();
+        responseSheet.setSheetName("Planilha do dia " + LocalDate.now() + ".xls");
+        responseSheet.setSheetByteArray(sheetManipulation.createSheet(students));
+        return responseSheet;
     }
 
-    public void returnSheetForSpecifyDay(LocalDate date) {
+    public ResponseSheet returnSheetForSpecifyDay(LocalDate date) {
         List<Student> students = studentsRepository
                 .findAll()
                 .stream()
                 .filter(student -> student.getFrequency().getDaysList().stream().anyMatch(_date -> _date.getDate().equals(date)))
                 .collect(Collectors.toList());
         SheetManipulation sheetManipulation = new SheetManipulation();
-        sheetManipulation.createSheet(students, date);
+        ResponseSheet responseSheet = new ResponseSheet();
+        responseSheet.setSheetName("Planilha do dia " + date + ".xls");
+        responseSheet.setSheetByteArray(sheetManipulation.createSheet(students, date));
+        return responseSheet;
     }
 
     public ResponseValidateFrequency justifyAbsence(LocalDate date, String cpf) {
