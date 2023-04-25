@@ -8,5 +8,6 @@ public class ExceptionsValues {
     public static final String USERNAME_ILLEGAL_CHARS = "O nome de usuário precisa ter apenas letras!";
     public static final String USER_NOT_FOUND = "Estudante não encontrado!";
     public static final String STUDENT_ALREADY_VALIDATED = "Frequência para o dia já validada!";
+    public static final String STUDENT_ALREADY_SAVED = "Estudante já cadastrado!";
 
 }

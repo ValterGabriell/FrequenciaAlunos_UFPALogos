@@ -34,7 +34,7 @@ class StudentsServiceTest {
     @Test
     @DisplayName("A username should have only letters and no numbers")
     void isUsernameOnlyLetters() {
-        Assertions.assertTrue(studentUsernameTest.usernameHasContainsOnlyLetters());
+        Assertions.assertTrue(studentUsernameTest.fieldContainsOnlyLetters("Username"));
     }
 
     @Test
@@ -46,14 +46,14 @@ class StudentsServiceTest {
     @Test
     @DisplayName("cpf should have exactly 11 characters and return true when it is")
     void cpfLenght() {
-        Assertions.assertTrue(studentCpfTest.isCpfHave11chars());
+        Assertions.assertTrue(studentCpfTest.isFieldHasNumberExcatlyOfChars(studentCpfTest.getCpf(), 11));
     }
 
     @Test
     @DisplayName("show throw RequestException with message when cpf are diferent than 11")
     void shoudExceptionWhenCpfIsWrongLenght() {
         studentCpfTest.setCpf("123");
-        Assertions.assertThrows(RequestExceptions.class, () -> studentCpfTest.isCpfHave11chars());
+        Assertions.assertThrows(RequestExceptions.class, () -> studentCpfTest.isFieldHasNumberExcatlyOfChars(studentCpfTest.getCpf(), 11));
     }
 
     @Test
@@ -67,7 +67,7 @@ class StudentsServiceTest {
     @DisplayName("show throw RequestException with message when username is null")
     void shoudExceptionWhenUsernameIsNull() {
         studentCpfTest.setUsername(" ");
-        Assertions.assertThrows(RequestExceptions.class, () -> studentCpfTest.usernameIsNull(), ExceptionsValues.USERNAME_NULL);
+        Assertions.assertThrows(RequestExceptions.class, () -> studentCpfTest.usernameIsNull());
     }
 
 

@@ -2,11 +2,14 @@ package io.github.ValterGabriell.FrequenciaAlunos.domain.students;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.dto.InsertStudents;
+import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues.STUDENT_ALREADY_SAVED;
 
 @Service
 public class StudentsService {
@@ -17,8 +20,15 @@ public class StudentsService {
     }
 
     public Student insertStudentIntoDatabase(InsertStudents request) {
+        boolean present = studentsRepository.findById(request.getCpf()).isPresent();
+        if (present){
+            throw new RequestExceptions(STUDENT_ALREADY_SAVED);
+        }
         Student student = request.toModel();
-        if (request.usernameIsNull() && request.isCpfHave11chars() && request.usernameHasToBeMoreThan2Chars() && request.usernameHasContainsOnlyLetters()) {
+        if (request.usernameIsNull()
+                && request.isFieldHasNumberExcatlyOfChars(request.getCpf(), 11)
+                && request.usernameHasToBeMoreThan2Chars()
+                && request.fieldContainsOnlyLetters(request.getUsername())) {
             Frequency frequency = new Frequency();
             frequency.setDaysList(new ArrayList<>());
             frequency.setId(request.getCpf());
