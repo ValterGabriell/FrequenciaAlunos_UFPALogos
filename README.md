@@ -189,7 +189,6 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
 
 
 <h2>Exportar tabela do excel</h2>
-<p>No momento a tabela é exportada apenas para a máquina, sendo salva na pasta C:/teste/teste.xls. É necessário criar esse caminho e arquivo para funcionar</p>
 <table>
   <tr>
     <th>Request</th>
@@ -197,22 +196,12 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
   </tr>
   <tr>
     <td>/frequency/sheet</td>
-    <td>Exporta tabela do dia atual</td>
+    <td>Baixa a tabela do dia atual</td>
   </tr>
 </table>
 
-<h3>Resposta esperada</h3></br>
-
-```
-OK! 
-
-verificar na pasta se um arquivo chamado "teste" foi criado, além do que você criou
-
-```
-
 
 <h2>Exportar tabela do excel para dia específico</h2>
-<p>No momento a tabela é exportada apenas para a máquina, sendo salva na pasta C:/teste/teste.xls. É necessário criar esse caminho e arquivo para funcionar</p>
 <table>
   <tr>
     <th>Request</th>
@@ -221,19 +210,11 @@ verificar na pasta se um arquivo chamado "teste" foi criado, além do que você 
   </tr>
   <tr>
     <td>/frequency/sheet</td>
-    <td>Exporta tabela do dia específico</td>
+    <td>Baixa a tabela do dia específico</td>
     <td>date (AAAA-MM-DD)</td>
   </tr>
 </table>
 
-<h3>Resposta esperada</h3></br>
-
-```
-OK! 
-
-verificar na pasta se um arquivo chamado "teste" foi criado, além do que você criou
-
-```
 
 
 
@@ -267,20 +248,10 @@ verificar na pasta se um arquivo chamado "teste" foi criado, além do que você 
 <h3>O nome de usuário não pode ser nulo</h3></br>
 
 ```
-   @Test
+    @Test
     @DisplayName("A username should be not null and return true when it is")
     void isUsernameNotNull_ReturnTrue_WhenUsernameIsNotNull() {
         Assertions.assertTrue(studentUsernameTest.usernameIsNull());
-    }
-    
-
-    
-        public boolean usernameIsNull() {
-        boolean isUsernameNotNull = !getUsername().isEmpty() && !getUsername().isBlank();
-        if (!isUsernameNotNull){
-            throw new RequestExceptions(ExceptionsValues.USERNAME_NULL);
-        }
-        return true;
     }
     
 ```
@@ -294,17 +265,6 @@ verificar na pasta se um arquivo chamado "teste" foi criado, além do que você 
     void isUsernameBiggerThan2Chars() {
         Assertions.assertTrue(studentUsernameTest.usernameHasToBeMoreThan2Chars());
     }
-
-    
-
-    
-  public boolean usernameHasToBeMoreThan2Chars() {
-        boolean isUsernameLenghtOk = getUsername().length() > 2;
-        if (!isUsernameLenghtOk){
-            throw new RequestExceptions(ExceptionsValues.USERNAME_ILLEGAL_LENGHT);
-        }
-        return true;
-    }
 ```
 
 
@@ -312,23 +272,10 @@ verificar na pasta se um arquivo chamado "teste" foi criado, além do que você 
 <h3>O nome de usuário precisa ter apenas letras</h3></br>
 
 ```
-    @Test
+   @Test
     @DisplayName("A username should have only letters and no numbers")
     void isUsernameOnlyLetters() {
-        Assertions.assertTrue(studentUsernameTest.usernameHasContainsOnlyLetters());
-    }
-
-
-    
-
-    
-    public boolean usernameHasContainsOnlyLetters() {
-        String regex = "^[a-zA-Z]+$";
-        boolean isUsernameLenghtOk = getUsername().matches(regex);
-        if (!isUsernameLenghtOk){
-            throw new RequestExceptions(ExceptionsValues.USERNAME_ILLEGAL_CHARS);
-        }
-        return true;
+        Assertions.assertTrue(studentUsernameTest.fieldContainsOnlyLetters("Username"));
     }
 ```
 
@@ -339,15 +286,7 @@ verificar na pasta se um arquivo chamado "teste" foi criado, além do que você 
     @Test
     @DisplayName("cpf should have exactly 11 characters and return true when it is")
     void cpfLenght() {
-        Assertions.assertTrue(studentCpfTest.isCpfHave11chars());
-    }
-    
-    public boolean isCpfHave11chars() {
-        boolean isCpfLenghtOk = getCpf().length() == 11;
-        if (!isCpfLenghtOk){
-            throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
-        }
-        return true;
+        Assertions.assertTrue(studentCpfTest.isFieldHasNumberExcatlyOfChars(studentCpfTest.getCpf(), 11));
     }
 ```
 
@@ -359,15 +298,6 @@ verificar na pasta se um arquivo chamado "teste" foi criado, além do que você 
     @DisplayName("A cpf should be not null and return true when it is")
     void isCpfNotNull_ReturnTrue_WhenUsernameIsNotNull() {
         Assertions.assertTrue(studentCpfTest.cpfIsNull());
-    }
-
-    
-    public boolean cpfIsNull() {
-        boolean isUsernameNotNull = !getCpf().isEmpty() && !getCpf().isBlank();
-        if (!isUsernameNotNull){
-            throw new RequestExceptions(ExceptionsValues.CPF_NULL);
-        }
-        return true;
     }
 ```
 
