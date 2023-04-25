@@ -3,7 +3,9 @@ package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseDaysThatStudentGoToClass;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseValidateFrequency;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +42,8 @@ public class FrequencyController {
 
     @GetMapping(value = "sheet")
     public ResponseEntity createSheet() throws FileNotFoundException {
-        frequencyService.createSheetForCurrentDay();
-        return ResponseEntity.status(HttpStatus.OK).body("OK!");
+        byte[] sheetForCurrentDay = frequencyService.createSheetForCurrentDay();
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=sheet.xls").contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(sheetForCurrentDay);
     }
 
     @GetMapping(value = "sheet", params = {"date"})

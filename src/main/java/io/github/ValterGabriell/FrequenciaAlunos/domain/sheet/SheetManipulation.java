@@ -6,9 +6,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,25 +69,31 @@ public class SheetManipulation implements ISheetManipulation {
      * @param dayOfMonth   current month day as int
      * @return
      */
-    private static void handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
+    private static byte[] handleCreateSheet(HSSFWorkbook workbook, String currentMonth, int dayOfMonth) {
         try {
             //return system username
             String userSystem = System.getProperty("user.name");
             String osName = System.getProperty("os.name").toLowerCase();
             String filePath = "";
-            if (osName.contains("windows")) {
-                CreateDirToWindows createDirToWindows = new CreateDirToWindows();
-                filePath = createDirToWindows.createDirToSheet(currentMonth, userSystem);
-            } else if (osName.contains("linux")) {
-                CreateDirToLinux createDirToLinux = new CreateDirToLinux();
-                filePath = createDirToLinux.createDirToSheet(currentMonth, userSystem);
+
+            CreateDir createDir;
+            switch (osName) {
+                case "windows" -> {
+                    createDir = new CreateDirToWindows();
+                    filePath = createDir.createDirToSheet(currentMonth, userSystem);
+                }
+                case "linux" -> {
+                    createDir = new CreateDirToLinux();
+                    filePath = createDir.createDirToSheet(currentMonth, userSystem);
+                }
             }
 
             //creating sheet to current day
             FileOutputStream out = new FileOutputStream(filePath + "Dia_" + dayOfMonth + ".xls");
             workbook.write(out);
             out.close();
-            System.out.println("Arquivo Excel criado com sucesso!");
+            File file = new File(filePath + "Dia_" + dayOfMonth + ".xls");
+            return Files.readAllBytes(file.toPath());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("Arquivo não encontrado!");
@@ -96,18 +101,18 @@ public class SheetManipulation implements ISheetManipulation {
             e.printStackTrace();
             System.out.println("Erro na edição do arquivo!");
         }
+        return new byte[0];
     }
 
     @Override
-    public void createSheet(List<Student> students) {
+    public byte[] createSheet(List<Student> students) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         String currentMonth = LocalDate.now().getMonth().toString();
         int dayOfMonth = LocalDate.now().getDayOfMonth();
         HSSFSheet sheetAlunos = workbook.createSheet(dayOfMonth + " " + currentMonth + " - PRESENÇA");
-
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        handleCreateSheet(workbook, currentMonth, dayOfMonth);
+        return handleCreateSheet(workbook, currentMonth, dayOfMonth);
     }
 
     @Override

@@ -2,7 +2,7 @@ package io.github.ValterGabriell.FrequenciaAlunos.domain.sheet;
 
 import java.io.File;
 
-public class CreateDirToWindows extends CreateDirAbstraction {
+public class CreateDirToWindows extends CreateDir {
 
     @Override
     public String createDirToSheet(String currentMonth, String userSystem) {

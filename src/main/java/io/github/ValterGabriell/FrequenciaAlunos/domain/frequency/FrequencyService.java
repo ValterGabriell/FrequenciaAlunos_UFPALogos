@@ -81,10 +81,10 @@ public class FrequencyService extends StudentValidation {
         return responseDaysThatStudentGoToClass;
     }
 
-    public void createSheetForCurrentDay() {
+    public byte[] createSheetForCurrentDay() {
         List<Student> students = studentsRepository.findAll();
         SheetManipulation sheetManipulation = new SheetManipulation();
-        sheetManipulation.createSheet(students);
+        return sheetManipulation.createSheet(students);
     }
 
     public void returnSheetForSpecifyDay(LocalDate date) {
