@@ -42,7 +42,7 @@ public class FrequencyController {
     }
 
     @GetMapping(value = "sheet")
-    public ResponseEntity<?> createSheet() throws FileNotFoundException {
+    public ResponseEntity<?> createSheet() {
         ResponseSheet responseSheet = frequencyService.createSheetForCurrentDay();
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName="+responseSheet.getSheetName())
@@ -51,7 +51,7 @@ public class FrequencyController {
     }
 
     @GetMapping(value = "sheet", params = {"date"})
-    public ResponseEntity<?> getSheetForSpecifyDay(@RequestParam LocalDate date) throws FileNotFoundException {
+    public ResponseEntity<?> getSheetForSpecifyDay(@RequestParam LocalDate date) {
         ResponseSheet responseSheet = frequencyService.returnSheetForSpecifyDay(date);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName="+responseSheet.getSheetName())
