@@ -8,7 +8,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -65,14 +64,12 @@ public class SheetManipulation implements SheetManipulationContract {
 
     /**
      * method to create sheet on current PC
-     * @param workbook     specify type to work with sheets
+     * @param workbook specify type to work with sheets
      * @return
      */
     private static byte[] handleCreateSheet(HSSFWorkbook workbook) {
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();) {
             workbook.write(byteArrayOutputStream);
-            byteArrayOutputStream.close();
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
