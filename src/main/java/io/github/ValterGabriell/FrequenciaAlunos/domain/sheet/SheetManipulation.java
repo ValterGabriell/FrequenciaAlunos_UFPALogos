@@ -1,5 +1,6 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.sheet;
 
+import io.github.ValterGabriell.FrequenciaAlunos.HandleDate;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -9,9 +10,16 @@ import org.apache.poi.ss.usermodel.Row;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+
+import static io.github.ValterGabriell.FrequenciaAlunos.HandleDate.getDateFormat;
 
 public class SheetManipulation implements SheetManipulationContract {
     /**
@@ -64,6 +72,7 @@ public class SheetManipulation implements SheetManipulationContract {
 
     /**
      * method to create sheet on current PC
+     *
      * @param workbook specify type to work with sheets
      * @return
      */
@@ -77,12 +86,11 @@ public class SheetManipulation implements SheetManipulationContract {
         }
     }
 
+
     @Override
     public byte[] createSheet(List<Student> students) {
         HSSFWorkbook workbook = new HSSFWorkbook();
-        String currentMonth = LocalDate.now().getMonth().toString();
-        int dayOfMonth = LocalDate.now().getDayOfMonth();
-        HSSFSheet sheetAlunos = workbook.createSheet(dayOfMonth + " " + currentMonth + " - PRESENÇA");
+        HSSFSheet sheetAlunos = workbook.createSheet(HandleDate.getDateFormat() + " - PRESENÇA");
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
         return handleCreateSheet(workbook);
@@ -91,9 +99,7 @@ public class SheetManipulation implements SheetManipulationContract {
     @Override
     public byte[] createSheet(List<Student> students, LocalDate localDate) {
         HSSFWorkbook workbook = new HSSFWorkbook();
-        String currentMonth = localDate.getMonth().toString();
-        int dayOfMonth = localDate.getDayOfMonth();
-        HSSFSheet sheetAlunos = workbook.createSheet(dayOfMonth + " " + currentMonth + " - PRESENÇA");
+        HSSFSheet sheetAlunos = workbook.createSheet(HandleDate.getDateFormat(localDate) + " - PRESENÇA");
 
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);

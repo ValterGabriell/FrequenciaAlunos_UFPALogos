@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 
 @RestController
@@ -45,7 +44,7 @@ public class FrequencyController {
     public ResponseEntity<?> createSheet() {
         ResponseSheet responseSheet = frequencyService.createSheetForCurrentDay();
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName="+responseSheet.getSheetName())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=" + responseSheet.getSheetName())
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(responseSheet.getSheetByteArray());
     }
@@ -54,7 +53,7 @@ public class FrequencyController {
     public ResponseEntity<?> getSheetForSpecifyDay(@RequestParam LocalDate date) {
         ResponseSheet responseSheet = frequencyService.returnSheetForSpecifyDay(date);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName="+responseSheet.getSheetName())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=" + responseSheet.getSheetName())
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(responseSheet.getSheetByteArray());
     }

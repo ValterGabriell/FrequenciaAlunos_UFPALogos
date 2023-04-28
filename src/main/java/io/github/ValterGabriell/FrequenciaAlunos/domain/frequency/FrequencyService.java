@@ -13,6 +13,8 @@ import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsReposi
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,7 +88,7 @@ public class FrequencyService extends StudentValidation {
         List<Student> students = studentsRepository.findAll();
         SheetManipulation sheetManipulation = new SheetManipulation();
         ResponseSheet responseSheet = new ResponseSheet();
-        responseSheet.setSheetName("Planilha do dia " + LocalDate.now() + ".xls");
+        responseSheet.setSheetName("Planilha do dia " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ".xls");
         responseSheet.setSheetByteArray(sheetManipulation.createSheet(students));
         return responseSheet;
     }
@@ -99,7 +101,7 @@ public class FrequencyService extends StudentValidation {
                 .collect(Collectors.toList());
         SheetManipulation sheetManipulation = new SheetManipulation();
         ResponseSheet responseSheet = new ResponseSheet();
-        responseSheet.setSheetName("Planilha do dia " + date + ".xls");
+        responseSheet.setSheetName("Planilha do dia " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ".xls");
         responseSheet.setSheetByteArray(sheetManipulation.createSheet(students, date));
         return responseSheet;
     }
