@@ -229,7 +229,7 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
   </tr>
   <tr>
     <td>/qrcode/generate</td>
-    <td>Retorna o QRcode que representa o ID do estudante</td>
+    <td>Retorna o QRcode que representa o ID e o Nome do estudante</td>
     <td>studentId</td>
   </tr>
 </table>
@@ -239,6 +239,31 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
 ![image](https://user-images.githubusercontent.com/63808405/232524532-3a0ce398-9446-4969-b300-fcfcb28d60e0.png)
 
 </br>
+
+
+<h1>DELETE</h1></br>
+
+<h2>Deletar estudante</h2>
+
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+    <th>Query</th>
+  </tr>
+  <tr>
+    <td>/students</td>
+    <td>realizar a delecao de um estudante no Database</td>
+    <td>studentId</td>
+  </tr> 
+  </table>
+  
+  <h3>Request esperada</h3></br>
+
+```bash
+no content
+```
+
 
 
 
@@ -298,6 +323,20 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
     @DisplayName("A cpf should be not null and return true when it is")
     void isCpfNotNull_ReturnTrue_WhenUsernameIsNotNull() {
         Assertions.assertTrue(studentCpfTest.cpfIsNull());
+    }
+```
+
+<h3>Verificando se o dia já está salvo na frequencia do estudante</h3></br>
+
+```
+    @Test
+    void verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs() {
+        List<Days> days = new ArrayList<>();
+        LocalDate date = LocalDate.now();
+        Days day = new Days(date);
+        days.add(day);
+        boolean contains = days.contains(day);
+        Assertions.assertTrue(contains);
     }
 ```
 
