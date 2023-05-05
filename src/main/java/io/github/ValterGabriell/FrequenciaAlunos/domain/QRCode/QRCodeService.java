@@ -1,6 +1,7 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.QRCode;
 
 import com.google.zxing.WriterException;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.Validation;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
@@ -8,10 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
 
-import static io.github.ValterGabriell.FrequenciaAlunos.domain.students.StudentValidation.validateIfStudentExistsAndReturnIfExist;
-
 @Service
-public class QRCodeService {
+public class QRCodeService extends Validation {
 
     private final StudentsRepository studentsRepository;
 
@@ -21,6 +20,7 @@ public class QRCodeService {
 
     /**
      * Method that create and returns qrcode with student id
+     *
      * @param studentId
      * @return qrcode generated
      * @throws WriterException

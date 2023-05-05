@@ -1,19 +1,19 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto;
 
-import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Day;
 
 import java.util.List;
 
 public class ResponseDaysThatStudentGoToClass {
     private String studentId;
-    private List<Days> daysListThatStudentGoToClasses;
+    private List<Day> dayListThatStudentGoToClasses;
 
     public ResponseDaysThatStudentGoToClass() {
     }
 
-    public ResponseDaysThatStudentGoToClass(String studentId, List<Days> daysListThatStudentGoToClasses) {
+    public ResponseDaysThatStudentGoToClass(String studentId, List<Day> dayListThatStudentGoToClasses) {
         this.studentId = studentId;
-        this.daysListThatStudentGoToClasses = daysListThatStudentGoToClasses;
+        this.dayListThatStudentGoToClasses = dayListThatStudentGoToClasses;
     }
 
 
@@ -25,11 +25,11 @@ public class ResponseDaysThatStudentGoToClass {
         this.studentId = studentId;
     }
 
-    public List<Days> getDaysListThatStudentGoToClass() {
-        return daysListThatStudentGoToClasses;
+    public List<Day> getDaysListThatStudentGoToClass() {
+        return dayListThatStudentGoToClasses;
     }
 
-    public void setDaysListThatStudentGoToClass(List<Days> daysListThatStudentGoToClasses) {
-        this.daysListThatStudentGoToClasses = daysListThatStudentGoToClasses;
+    public void setDaysListThatStudentGoToClass(List<Day> dayListThatStudentGoToClasses) {
+        this.dayListThatStudentGoToClasses = dayListThatStudentGoToClasses;
     }
 }

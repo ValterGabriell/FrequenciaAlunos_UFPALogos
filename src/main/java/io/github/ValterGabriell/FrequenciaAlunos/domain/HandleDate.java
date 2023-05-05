@@ -1,4 +1,4 @@
-package io.github.ValterGabriell.FrequenciaAlunos;
+package io.github.ValterGabriell.FrequenciaAlunos.domain;
 
 import java.text.DateFormat;
 import java.time.LocalDate;

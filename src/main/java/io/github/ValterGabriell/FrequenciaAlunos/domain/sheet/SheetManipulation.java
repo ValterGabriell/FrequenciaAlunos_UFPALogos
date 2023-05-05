@@ -1,6 +1,6 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.sheet;
 
-import io.github.ValterGabriell.FrequenciaAlunos.HandleDate;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.HandleDate;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -10,16 +10,11 @@ import org.apache.poi.ss.usermodel.Row;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
-import static io.github.ValterGabriell.FrequenciaAlunos.HandleDate.getDateFormat;
+import static io.github.ValterGabriell.FrequenciaAlunos.domain.HandleDate.getDateFormat;
 
 public class SheetManipulation implements SheetManipulationContract {
     /**
@@ -44,7 +39,6 @@ public class SheetManipulation implements SheetManipulationContract {
 
     /**
      * fill the sheet with students data
-     *
      * @param students    current student to insert on sheet
      * @param sheetAlunos sheet
      */
@@ -71,12 +65,11 @@ public class SheetManipulation implements SheetManipulationContract {
     }
 
     /**
-     * method to create sheet on current PC
-     *
+     * method to and download sheet
      * @param workbook specify type to work with sheets
-     * @return
+     * @return byte array that contains sheet
      */
-    private static byte[] handleCreateSheet(HSSFWorkbook workbook) {
+    private static byte[] handleDownloadSheet(HSSFWorkbook workbook) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();) {
             workbook.write(byteArrayOutputStream);
             return byteArrayOutputStream.toByteArray();
@@ -93,17 +86,16 @@ public class SheetManipulation implements SheetManipulationContract {
         HSSFSheet sheetAlunos = workbook.createSheet(HandleDate.getDateFormat() + " - PRESENÇA");
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        return handleCreateSheet(workbook);
+        return handleDownloadSheet(workbook);
     }
 
     @Override
     public byte[] createSheet(List<Student> students, LocalDate localDate) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheetAlunos = workbook.createSheet(HandleDate.getDateFormat(localDate) + " - PRESENÇA");
-
         createHeadersOfColumns(sheetAlunos);
         createColumnsWithFields(students, sheetAlunos);
-        return handleCreateSheet(workbook);
+        return handleDownloadSheet(workbook);
     }
 
 }

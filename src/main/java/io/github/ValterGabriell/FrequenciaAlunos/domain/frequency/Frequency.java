@@ -1,7 +1,7 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Day;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,27 +13,22 @@ import java.util.List;
 public class Frequency {
     @Id
     private String id;
-    @OneToMany(targetEntity = Days.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Day.class, cascade = CascadeType.PERSIST)
     @JsonIgnore
-    private List<Days> daysList;
+    private List<Day> dayList;
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public List<Days> getDaysList() {
-        return daysList;
+    public List<Day> getDaysList() {
+        return dayList;
     }
 
-    public void setDaysList(List<Days> daysList) {
-        this.daysList = daysList;
+    public void setDaysList(List<Day> dayList) {
+        this.dayList = dayList;
     }
 
     public Frequency() {
     }
-
-    public String getId() {
-        return id;
-    }
-
 }

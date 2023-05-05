@@ -1,5 +1,6 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.students;
 
+import io.github.ValterGabriell.FrequenciaAlunos.domain.Validation;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.dto.InsertStudents;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
@@ -12,7 +13,7 @@ import java.util.List;
 import static io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues.STUDENT_ALREADY_SAVED;
 
 @Service
-public class StudentsService {
+public class StudentsService extends Validation {
     private final StudentsRepository studentsRepository;
 
     public StudentsService(StudentsRepository studentsRepository) {
@@ -21,7 +22,7 @@ public class StudentsService {
 
     public Student insertStudentIntoDatabase(InsertStudents request) {
         boolean present = studentsRepository.findById(request.getCpf()).isPresent();
-        if (present){
+        if (present) {
             throw new RequestExceptions(STUDENT_ALREADY_SAVED);
         }
         Student student = request.toModel();
@@ -40,5 +41,10 @@ public class StudentsService {
 
     public List<Student> getAllStudentsFromDatabase() {
         return studentsRepository.findAll();
+    }
+
+    public void deleteStudent(String studentId) {
+        Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
+        studentsRepository.delete(student);
     }
 }
