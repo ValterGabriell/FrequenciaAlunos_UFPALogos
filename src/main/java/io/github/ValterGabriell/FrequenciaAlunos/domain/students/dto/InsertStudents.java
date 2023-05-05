@@ -1,10 +1,11 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.students.dto;
 
+import io.github.ValterGabriell.FrequenciaAlunos.domain.Validation;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 
-public class InsertStudents extends FieldValidation {
+public class InsertStudents extends Validation {
     private String cpf;
 
     private String username;
@@ -18,25 +19,9 @@ public class InsertStudents extends FieldValidation {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
 
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Override
-    public boolean validateIfIsEmpty(String field, String e) {
-        boolean isFieldNotNull = !field.isEmpty() || field.isBlank();
-        if (!isFieldNotNull) {
-            throw new RequestExceptions(e);
-        }
-        return true;
     }
 
     public boolean usernameIsNull() {
@@ -50,7 +35,6 @@ public class InsertStudents extends FieldValidation {
     public boolean usernameHasToBeMoreThan2Chars() {
         return validateIfIsEmpty(getUsername(), ExceptionsValues.USERNAME_ILLEGAL_LENGHT);
     }
-
 
     public Student toModel() {
         return new Student(this.cpf, this.username);

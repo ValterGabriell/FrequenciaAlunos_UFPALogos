@@ -1,12 +1,12 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.frequency;
 
+import io.github.ValterGabriell.FrequenciaAlunos.domain.Validation;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseDaysThatStudentGoToClass;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.dto.ResponseValidateFrequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.sheet.SheetManipulation;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.sheet.dto.ResponseSheet;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
-import io.github.ValterGabriell.FrequenciaAlunos.domain.students.StudentValidation;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
@@ -19,24 +19,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FrequencyService extends StudentValidation {
+public class FrequencyService extends Validation {
 
 
     private final StudentsRepository studentsRepository;
 
     public FrequencyService(StudentsRepository studentsRepository) {
         this.studentsRepository = studentsRepository;
-    }
-
-    private static void verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(Frequency frequency, LocalDate parameterDate) {
-        /*
-          throw erro if try to validate same day twice
-         */
-        frequency.getDaysList().forEach(days -> {
-            if (days.getDate().equals(parameterDate)) {
-                throw new RequestExceptions(ExceptionsValues.STUDENT_ALREADY_VALIDATED);
-            }
-        });
     }
 
     /**
@@ -47,23 +36,18 @@ public class FrequencyService extends StudentValidation {
      * TODO: create validation to student only mark frequency once per day.
      */
     public ResponseValidateFrequency validateFrequency(String studentId) throws RequestExceptions {
-        if (studentId.length() != 11) {
-            throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
-        }
+        checkIfStudentCpfAreCorrect(studentId);
         Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
         Frequency frequency = student.getFrequency();
 
-        Days currentDays = new Days();
-        currentDays.setDate(LocalDate.now());
+        Days currentDay = new Days(LocalDate.now());
+        verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(frequency, currentDay);
 
-        verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(frequency, LocalDate.now());
-
-        frequency.getDaysList().add(currentDays);
-
+        frequency.getDaysList().add(currentDay);
         studentsRepository.save(student);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
-        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " válidada! - Dia: " + LocalDate.now());
+        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " válidada! - Dia: " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
         return responseValidateFrequency;
     }
 
@@ -73,10 +57,7 @@ public class FrequencyService extends StudentValidation {
      * @param studentId represent primary key of student table
      */
     public ResponseDaysThatStudentGoToClass getListOfDaysByFrequencyId(String studentId) throws RequestExceptions {
-        if (studentId.length() != 11) {
-            throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
-        }
-
+        checkIfStudentCpfAreCorrect(studentId);
         Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
         ResponseDaysThatStudentGoToClass responseDaysThatStudentGoToClass = new ResponseDaysThatStudentGoToClass();
         responseDaysThatStudentGoToClass.setStudentId(student.getCpf());
@@ -97,7 +78,7 @@ public class FrequencyService extends StudentValidation {
         List<Student> students = studentsRepository
                 .findAll()
                 .stream()
-                .filter(student -> student.getFrequency().getDaysList().stream().anyMatch(_date -> _date.getDate().equals(date)))
+                .filter(student -> student.getFrequency().getDaysList().stream().anyMatch(_day -> _day.getDate().equals(date)))
                 .collect(Collectors.toList());
         SheetManipulation sheetManipulation = new SheetManipulation();
         ResponseSheet responseSheet = new ResponseSheet();
@@ -109,13 +90,11 @@ public class FrequencyService extends StudentValidation {
     public ResponseValidateFrequency justifyAbsence(LocalDate date, String cpf) {
         Student student = studentsRepository.findById(cpf).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
         Frequency frequency = student.getFrequency();
-        verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(frequency, date);
+        Days day = new Days(date);
+        verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(frequency, day);
 
-        Days day = new Days();
-        day.setDate(date);
         day.setJustified(true);
         frequency.getDaysList().add(day);
-
         studentsRepository.save(student);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();

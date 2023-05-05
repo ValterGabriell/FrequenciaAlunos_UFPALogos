@@ -5,6 +5,7 @@ import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Days {
@@ -16,6 +17,15 @@ public class Days {
     private boolean justified;
 
     public Days() {
+    }
+
+    public Days(LocalDate date) {
+        this.date = date;
+    }
+
+    public Days(LocalDate date, boolean justified) {
+        this.date = date;
+        this.justified = false;
     }
 
     public boolean isJustified() {
@@ -38,5 +48,17 @@ public class Days {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return date != null && date.equals(((Days) o).date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date);
     }
 }

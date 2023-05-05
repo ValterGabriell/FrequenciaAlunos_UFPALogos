@@ -29,4 +29,10 @@ public class StudentsController {
         List<Student> allStudentsFromDatabase = service.getAllStudentsFromDatabase();
         return new ResponseEntity<>(allStudentsFromDatabase, HttpStatus.CREATED);
     }
+
+    @DeleteMapping(params = {"studentId"})
+    public ResponseEntity deleteStudent(String studentId) {
+        service.deleteStudent(studentId);
+        return ResponseEntity.noContent().build();
+    }
 }
