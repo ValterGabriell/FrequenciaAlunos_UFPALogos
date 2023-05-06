@@ -254,8 +254,8 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
     <th>Query</th>
   </tr>
   <tr>
-    <td>/students</td>
-    <td>realizar a delecao de um estudante no Database</td>
+    <td>/frequency</td>
+    <td>realizar a atualizacao de uma justificativa no Database</td>
     <td>studentId</td>
     <td>date</td>
   </tr> 
@@ -269,6 +269,39 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
 }
 ```
 </br>
+
+
+<h1>PATCH</h1>
+
+<h2>Atualizar estudante</h2>
+
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+    <th>Query</th>
+  </tr>
+  <tr>
+    <td>/students</td>
+    <td>realizar a atualizacao de um estudante no Database</td>
+    <td>studentId</td>
+  </tr> 
+  </table>
+  
+  <h3>Request esperada</h3></br>
+
+```bash
+{
+	"cpf": "11111111111",
+	"username": "gabriel"
+}
+```
+</br>
+
+
+
+
+
 <h1>DELETE</h1>
 
 <h2>Deletar estudante</h2>
