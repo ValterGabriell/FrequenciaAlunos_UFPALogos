@@ -24,6 +24,12 @@ public class StudentsController {
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
+    @PatchMapping(params = {"studentId"})
+    public ResponseEntity<Student> updateStudent(@RequestBody InsertStudents request, @RequestParam String studentId) throws Exception {
+        Student student = service.updateStudent(request, studentId);
+        return new ResponseEntity<>(student, HttpStatus.CREATED);
+    }
+
     @GetMapping("get-all")
     public ResponseEntity<List<Student>> getAllStudents() {
         List<Student> allStudentsFromDatabase = service.getAllStudentsFromDatabase();

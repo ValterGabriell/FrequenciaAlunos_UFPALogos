@@ -11,4 +11,5 @@ public class ExceptionsValues {
     public static final String STUDENT_ALREADY_SAVED = "Estudante já cadastrado!";
 
     public static final String DAY_NOT_FOUND = "Dia nao encontrado na frequencia do aluno";
+    public static final String FREQUENCY_NOT_FOUND = "Frequencia nao encontrada";
 }

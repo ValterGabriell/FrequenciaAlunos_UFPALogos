@@ -1,8 +1,10 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.students;
 
 import io.github.ValterGabriell.FrequenciaAlunos.domain.Validation;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.days.Days;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.dto.InsertStudents;
+import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.FrequencyRepository;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
@@ -36,11 +38,38 @@ public class StudentsService extends Validation {
             Frequency frequency = new Frequency();
             frequency.setDaysList(new ArrayList<>());
             frequency.setId(request.getCpf());
-            student.setFrequency(frequency);
             frequencyRepository.save(frequency);
             studentsRepository.save(student);
         }
         return student;
+    }
+
+    public Student updateStudent(InsertStudents request, String studentId) {
+        Student oldStudent = studentsRepository.findById(studentId).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
+        Student newStudent = new Student();
+        if (request.usernameIsNull()
+                && request.isFieldHasNumberExcatlyOfChars(request.getCpf(), 11)
+                && request.usernameHasToBeMoreThan2Chars()
+                && request.fieldContainsOnlyLetters(request.getUsername())) {
+
+            Frequency frequency = frequencyRepository
+                    .findById(oldStudent.getCpf())
+                    .orElseThrow(() -> new RequestExceptions(ExceptionsValues.FREQUENCY_NOT_FOUND));
+            List<Days> daysList = frequency.getDaysList();
+            frequencyRepository.delete(frequency);
+
+            Frequency newFrequency = new Frequency();
+            newFrequency.setId(request.getCpf());
+            newFrequency.setDaysList(daysList);
+            frequencyRepository.save(newFrequency);
+
+
+            studentsRepository.delete(oldStudent);
+            newStudent.setCpf(request.getCpf());
+            newStudent.setUsername(request.getUsername());
+            studentsRepository.save(newStudent);
+        }
+        return newStudent;
     }
 
     public List<Student> getAllStudentsFromDatabase() {
