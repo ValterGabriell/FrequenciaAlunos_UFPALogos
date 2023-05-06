@@ -4,6 +4,7 @@ import io.github.ValterGabriell.FrequenciaAlunos.domain.Validation;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.dto.InsertStudents;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
+import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.FrequencyRepository;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import static io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValu
 @Service
 public class StudentsService extends Validation {
     private final StudentsRepository studentsRepository;
+    private final FrequencyRepository frequencyRepository;
 
-    public StudentsService(StudentsRepository studentsRepository) {
+    public StudentsService(StudentsRepository studentsRepository, FrequencyRepository frequencyRepository) {
         this.studentsRepository = studentsRepository;
+        this.frequencyRepository = frequencyRepository;
     }
 
     public Student insertStudentIntoDatabase(InsertStudents request) {
@@ -34,6 +37,7 @@ public class StudentsService extends Validation {
             frequency.setDaysList(new ArrayList<>());
             frequency.setId(request.getCpf());
             student.setFrequency(frequency);
+            frequencyRepository.save(frequency);
             studentsRepository.save(student);
         }
         return student;

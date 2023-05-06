@@ -15,6 +15,7 @@ public class Student {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
+    @Transient
     private Frequency frequency;
 
     public Student(String cpf, String username) {
