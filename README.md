@@ -292,6 +292,8 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
 
 ```bash
 {
+	Novos dados
+
 	"cpf": "11111111111",
 	"username": "gabriel"
 }
