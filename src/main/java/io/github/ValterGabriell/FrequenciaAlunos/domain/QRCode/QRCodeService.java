@@ -22,8 +22,7 @@ public class QRCodeService extends Validation {
 
     /**
      * Method that create and returns qrcode with student id
-     *
-     * @param studentId
+     * @param studentId representing the student id to put data on qrcode
      * @return qrcode generated
      * @throws WriterException
      */

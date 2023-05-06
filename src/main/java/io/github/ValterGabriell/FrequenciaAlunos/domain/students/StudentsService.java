@@ -25,6 +25,14 @@ public class StudentsService extends Validation {
         this.frequencyRepository = frequencyRepository;
     }
 
+    /**
+     * method to insert student on database
+     * @param request request with data to make the insertion
+     *                should be: cpf with formatt: XXXXXXXXXXX
+     *                cpf must contains 11 characters only with numbers
+     *                besides that, student username that is a simple string that must contains only letters
+     * @return student object created
+     */
     public Student insertStudentIntoDatabase(InsertStudents request) {
         boolean present = studentsRepository.findById(request.getCpf()).isPresent();
         if (present) {
@@ -44,26 +52,39 @@ public class StudentsService extends Validation {
         return student;
     }
 
+    /**
+     * update student data
+     * @param request request with new data to make the insertion should be: cpf with formatt: XXXXXXXXXXX cpf must contains 11 characters only with numbers besides that, student username that is a simple string that must contains only letters
+     * @param studentId id of student that wanna update
+     * @return student updated
+     */
     public Student updateStudent(InsertStudents request, String studentId) {
+        /* get student to be updated */
         Student oldStudent = studentsRepository.findById(studentId).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
+        /* create new student object */
         Student newStudent = new Student();
         if (request.usernameIsNull()
                 && request.isFieldHasNumberExcatlyOfChars(request.getCpf(), 11)
                 && request.usernameHasToBeMoreThan2Chars()
                 && request.fieldContainsOnlyLetters(request.getUsername())) {
 
+            /* get the frequency of student to be updated */
             Frequency frequency = frequencyRepository
                     .findById(oldStudent.getCpf())
                     .orElseThrow(() -> new RequestExceptions(ExceptionsValues.FREQUENCY_NOT_FOUND));
+            /* store the list of days from students in a variabel dayList */
             List<Days> daysList = frequency.getDaysList();
+            /* delete the student frequency */
             frequencyRepository.delete(frequency);
 
+            /* create a new frequency with the new id and old dayList */
             Frequency newFrequency = new Frequency();
             newFrequency.setId(request.getCpf());
             newFrequency.setDaysList(daysList);
             frequencyRepository.save(newFrequency);
 
-
+            /* delete old student and create a new student with new data.
+            * student id is matching frequency id */
             studentsRepository.delete(oldStudent);
             newStudent.setCpf(request.getCpf());
             newStudent.setUsername(request.getUsername());

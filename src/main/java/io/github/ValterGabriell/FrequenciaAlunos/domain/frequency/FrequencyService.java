@@ -36,10 +36,8 @@ public class FrequencyService extends Validation {
 
     /**
      * method that validate student frequency
-     *
      * @param studentId represent primary key of student table
      * @return response with the student frequency validated or erro while validation frequency
-     * TODO: create validation to student only mark frequency once per day.
      */
     public ResponseValidateFrequency validateFrequency(String studentId) throws RequestExceptions {
         checkIfStudentCpfAreCorrect(studentId);
@@ -58,7 +56,6 @@ public class FrequencyService extends Validation {
 
     /**
      * return list with days that specific student watched class
-     *
      * @param studentId represent primary key of student table
      */
     public ResponseDaysThatStudentGoToClass getListOfDaysByFrequencyId(String studentId) throws RequestExceptions {
@@ -71,28 +68,42 @@ public class FrequencyService extends Validation {
         return responseDaysThatStudentGoToClass;
     }
 
+    /*
+    create sheet for current day and download it
+     */
     public ResponseSheet createSheetForCurrentDay() {
-        List<Student> students = studentsRepository.findAll();
-        SheetManipulation sheetManipulation = new SheetManipulation();
         ResponseSheet responseSheet = new ResponseSheet();
+        SheetManipulation sheetManipulation = new SheetManipulation();
+        List<Student> students = studentsRepository.findAll();
         responseSheet.setSheetName("Planilha do dia " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ".xls");
         responseSheet.setSheetByteArray(sheetManipulation.createSheet(students));
         return responseSheet;
     }
 
+    /**
+     * create sheet for specified date
+     * @param date that represent date to create sheet
+     * @return sheet download
+     */
     public ResponseSheet returnSheetForSpecifyDay(LocalDate date) {
+        SheetManipulation sheetManipulation = new SheetManipulation();
+        ResponseSheet responseSheet = new ResponseSheet();
         List<Student> students = studentsRepository
                 .findAll()
                 .stream()
                 .filter(student -> frequencyRepository.findById(student.getCpf()).get().getDaysList().stream().anyMatch(_day -> _day.getDate().equals(date)))
                 .collect(Collectors.toList());
-        SheetManipulation sheetManipulation = new SheetManipulation();
-        ResponseSheet responseSheet = new ResponseSheet();
         responseSheet.setSheetName("Planilha do dia " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ".xls");
         responseSheet.setSheetByteArray(sheetManipulation.createSheet(students, date));
         return responseSheet;
     }
 
+    /**
+     * method to justify abscence of student on some class
+     * @param date date to validate student present
+     * @param studentId student to be justified
+     * @return string with message
+     */
     public ResponseValidateFrequency justifyAbsence(LocalDate date, String studentId) {
         Student student = studentsRepository.findById(studentId).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
         Frequency frequency = frequencyRepository.findById(student.getCpf()).get();
@@ -108,6 +119,12 @@ public class FrequencyService extends Validation {
         return responseValidateFrequency;
     }
 
+    /**
+     * update the justified field changing it from true to false
+     * @param date date to change the student present
+     * @param studentId student to be justified
+     * @return string with message
+     */
     public ResponseValidateFrequency updateAbscence(LocalDate date, String studentId) {
         Student student = studentsRepository.findById(studentId).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
         Frequency frequency = frequencyRepository.findById(student.getCpf()).get();
@@ -117,7 +134,7 @@ public class FrequencyService extends Validation {
                 .findFirst()
                 .orElseThrow(() -> new RequestExceptions(ExceptionsValues.DAY_NOT_FOUND));
 
-        dayFounded.setJustified(!dayFounded.isJustified());
+        dayFounded.setJustified(false);
         daysRepository.save(dayFounded);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();

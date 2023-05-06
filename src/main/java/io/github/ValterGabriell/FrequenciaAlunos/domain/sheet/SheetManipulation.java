@@ -42,7 +42,7 @@ public class SheetManipulation implements SheetManipulationContract {
      * @param students    current student to insert on sheet
      * @param sheetAlunos sheet
      */
-    private static void createColumnsWithFields(List<Student> students, HSSFSheet sheetAlunos) {
+    private static void createFieldOfColumns(List<Student> students, HSSFSheet sheetAlunos) {
         int rownumber = 1;
         int columnnumber = 0;
         for (Student student : students) {
@@ -69,7 +69,7 @@ public class SheetManipulation implements SheetManipulationContract {
      * @param workbook specify type to work with sheets
      * @return byte array that contains sheet
      */
-    private static byte[] handleDownloadSheet(HSSFWorkbook workbook) {
+    private static byte[] returnSheetByteArrayToDownloadIt(HSSFWorkbook workbook) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();) {
             workbook.write(byteArrayOutputStream);
             return byteArrayOutputStream.toByteArray();
@@ -85,8 +85,8 @@ public class SheetManipulation implements SheetManipulationContract {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheetAlunos = workbook.createSheet(HandleDate.getDateFormat() + " - PRESENÇA");
         createHeadersOfColumns(sheetAlunos);
-        createColumnsWithFields(students, sheetAlunos);
-        return handleDownloadSheet(workbook);
+        createFieldOfColumns(students, sheetAlunos);
+        return returnSheetByteArrayToDownloadIt(workbook);
     }
 
     @Override
@@ -94,8 +94,8 @@ public class SheetManipulation implements SheetManipulationContract {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheetAlunos = workbook.createSheet(HandleDate.getDateFormat(localDate) + " - PRESENÇA");
         createHeadersOfColumns(sheetAlunos);
-        createColumnsWithFields(students, sheetAlunos);
-        return handleDownloadSheet(workbook);
+        createFieldOfColumns(students, sheetAlunos);
+        return returnSheetByteArrayToDownloadIt(workbook);
     }
 
 }
