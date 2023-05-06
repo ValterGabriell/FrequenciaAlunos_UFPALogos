@@ -9,6 +9,7 @@ import io.github.ValterGabriell.FrequenciaAlunos.domain.sheet.dto.ResponseSheet;
 import io.github.ValterGabriell.FrequenciaAlunos.domain.students.Student;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues;
 import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
+import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.DaysRepository;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.FrequencyRepository;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,12 @@ public class FrequencyService extends Validation {
 
 
     private final StudentsRepository studentsRepository;
+    private final DaysRepository daysRepository;
     private final FrequencyRepository frequencyRepository;
 
-    public FrequencyService(StudentsRepository studentsRepository, FrequencyRepository frequencyRepository) {
+    public FrequencyService(StudentsRepository studentsRepository, DaysRepository daysRepository, FrequencyRepository frequencyRepository) {
         this.studentsRepository = studentsRepository;
+        this.daysRepository = daysRepository;
         this.frequencyRepository = frequencyRepository;
     }
 
@@ -90,8 +93,8 @@ public class FrequencyService extends Validation {
         return responseSheet;
     }
 
-    public ResponseValidateFrequency justifyAbsence(LocalDate date, String cpf) {
-        Student student = studentsRepository.findById(cpf).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
+    public ResponseValidateFrequency justifyAbsence(LocalDate date, String studentId) {
+        Student student = studentsRepository.findById(studentId).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
         Frequency frequency = frequencyRepository.findById(student.getCpf()).get();
         Days day = new Days(date);
         verifyIfDayAlreadySavedOnFrequencyAndThrowAnErroIfItIs(frequency, day);
@@ -103,7 +106,22 @@ public class FrequencyService extends Validation {
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
         responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " justificada! - Dia: " + LocalDate.now());
         return responseValidateFrequency;
-
     }
 
+    public ResponseValidateFrequency updateAbscence(LocalDate date, String studentId) {
+        Student student = studentsRepository.findById(studentId).orElseThrow(() -> new RequestExceptions(ExceptionsValues.USER_NOT_FOUND));
+        Frequency frequency = frequencyRepository.findById(student.getCpf()).get();
+        Days dayFounded = frequency.getDaysList()
+                .stream()
+                .filter(days -> days.getDate().equals(date))
+                .findFirst()
+                .orElseThrow(() -> new RequestExceptions(ExceptionsValues.DAY_NOT_FOUND));
+
+        dayFounded.setJustified(!dayFounded.isJustified());
+        daysRepository.save(dayFounded);
+
+        ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
+        responseValidateFrequency.setMessage("Justificativa para " + student.getUsername() + " atualizada! - Dia: " + LocalDate.now());
+        return responseValidateFrequency;
+    }
 }

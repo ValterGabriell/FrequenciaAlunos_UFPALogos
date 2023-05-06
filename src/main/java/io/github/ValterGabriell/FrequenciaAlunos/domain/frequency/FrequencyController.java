@@ -34,6 +34,12 @@ public class FrequencyController {
         return new ResponseEntity<>(responseValidadeFrequency, HttpStatus.OK);
     }
 
+    @PutMapping(params = {"studentId", "date"})
+    public ResponseEntity<ResponseValidateFrequency> updateAbscence(@RequestParam String studentId, @RequestParam LocalDate date) throws RequestExceptions {
+        ResponseValidateFrequency responseValidadeFrequency = frequencyService.updateAbscence(date, studentId);
+        return new ResponseEntity<>(responseValidadeFrequency, HttpStatus.OK);
+    }
+
     @GetMapping(params = {"studentId"})
     public ResponseEntity<ResponseDaysThatStudentGoToClass> getListOfDays(@RequestParam String studentId) throws RequestExceptions {
         ResponseDaysThatStudentGoToClass listOfDaysByFrequencyId = frequencyService.getListOfDaysByFrequencyId(studentId);
