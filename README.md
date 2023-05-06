@@ -241,6 +241,34 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
 </br>
 
 
+
+<h1>UPDATE</h1></br>
+
+<h2>Atualizar falta de estudante</h2>
+
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+    <th>Query</th>
+    <th>Query</th>
+  </tr>
+  <tr>
+    <td>/students</td>
+    <td>realizar a delecao de um estudante no Database</td>
+    <td>studentId</td>
+    <td>date</td>
+  </tr> 
+  </table>
+  
+  <h3>Request esperada</h3></br>
+
+```bash
+{
+	"message": "Justificativa para gabriel atualizada! - Dia: 2023-05-06"
+}
+```
+
 <h1>DELETE</h1></br>
 
 <h2>Deletar estudante</h2>
