@@ -242,7 +242,7 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
 
 
 
-<h1>UPDATE</h1></br>
+<h1>PUT</h1></br>
 
 <h2>Atualizar falta de estudante</h2>
 
