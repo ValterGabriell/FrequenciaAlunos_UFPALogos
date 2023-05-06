@@ -21,7 +21,7 @@ Este é um projeto que deve automatizar o sistema de frequência de alunos no cu
 ```bash
 http://localhost:8080/
 ``` 
-<h1>POST</h1></br>
+<h1>POST</h1>
 
 <h2>Cadastrar estudante</h2>
 
@@ -109,10 +109,10 @@ http://localhost:8080/
 }
 ```
 
+</br>
 
 
-
-<h1>GET</h1></br>
+<h1>GET</h1>
 
 
 <h2>Recuperar todos os estudantes</h2>
@@ -238,10 +238,71 @@ Quando justified for false, significa que o aluno foi para a aula no dia em ques
 
 ![image](https://user-images.githubusercontent.com/63808405/232524532-3a0ce398-9446-4969-b300-fcfcb28d60e0.png)
 
+
+
+</br>
+
+<h1>PUT</h1>
+
+<h2>Atualizar falta de estudante</h2>
+
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+    <th>Query</th>
+    <th>Query</th>
+  </tr>
+  <tr>
+    <td>/frequency</td>
+    <td>realizar a atualizacao de uma justificativa no Database</td>
+    <td>studentId</td>
+    <td>date</td>
+  </tr> 
+  </table>
+  
+  <h3>Request esperada</h3></br>
+
+```bash
+{
+	"message": "Justificativa para gabriel atualizada! - Dia: 2023-05-06"
+}
+```
 </br>
 
 
-<h1>DELETE</h1></br>
+<h1>PATCH</h1>
+
+<h2>Atualizar estudante</h2>
+
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+    <th>Query</th>
+  </tr>
+  <tr>
+    <td>/students</td>
+    <td>realizar a atualizacao de um estudante no Database</td>
+    <td>studentId</td>
+  </tr> 
+  </table>
+  
+  <h3>Request esperada</h3></br>
+
+```bash
+{
+	"cpf": "11111111111",
+	"username": "gabriel"
+}
+```
+</br>
+
+
+
+
+
+<h1>DELETE</h1>
 
 <h2>Deletar estudante</h2>
 
@@ -265,7 +326,7 @@ no content
 ```
 
 
-
+</br>
 
 
 <h1>Testes</h1>
