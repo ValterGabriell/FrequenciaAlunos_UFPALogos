@@ -134,7 +134,7 @@ public class FrequencyService extends Validation {
                 .findFirst()
                 .orElseThrow(() -> new RequestExceptions(ExceptionsValues.DAY_NOT_FOUND));
 
-        dayFounded.setJustified(false);
+        dayFounded.setJustified(!dayFounded.isJustified());
         daysRepository.save(dayFounded);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
