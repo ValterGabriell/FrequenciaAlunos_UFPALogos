@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Days {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private LocalDate date;
     private boolean justified;
@@ -26,6 +26,10 @@ public class Days {
     public Days(LocalDate date, boolean justified) {
         this.date = date;
         this.justified = false;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public boolean isJustified() {
