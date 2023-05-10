@@ -26,12 +26,11 @@ public class QRCodeService extends Validation {
 
     /**
      * Method that create and returns qrcode with student id
-     *
      * @param studentId representing the student id to put data on qrcode
-     * @return qrcode generated
+     * @return qrcode generated as base64
      * @throws WriterException
      */
-    public String generateQRCode(String studentId) throws WriterException, RequestExceptions {
+    public String returnQrCodeAsBase64(String studentId) throws WriterException, RequestExceptions {
         if (studentId.length() != 11) {
             throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
         }
@@ -47,6 +46,15 @@ public class QRCodeService extends Validation {
             throw new RuntimeException(e);
         }
         return imageAsBase64;
+    }
+
+    public BufferedImage returnQrCodeImage(String studentId) throws WriterException, RequestExceptions {
+        if (studentId.length() != 11) {
+            throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
+        }
+        Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
+        QrCodeMessage qrm = new QrCodeMessage(student.getUsername(), student.getCpf());
+        return QRCodeGenerate.generateQRCodeImage(qrm, 150, 150);
     }
 
 }
