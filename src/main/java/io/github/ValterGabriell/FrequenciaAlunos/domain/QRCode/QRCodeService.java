@@ -36,7 +36,7 @@ public class QRCodeService extends Validation {
         }
         Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
         QrCodeMessage qrm = new QrCodeMessage(student.getUsername(), student.getCpf());
-        BufferedImage bufferedImage = QRCodeGenerate.generateQRCodeImage(qrm, 300, 300);
+        BufferedImage bufferedImage = QRCodeGenerate.generateQRCodeImage(qrm, 400, 400);
         String imageAsBase64;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.write(bufferedImage, "png", baos);
@@ -54,7 +54,7 @@ public class QRCodeService extends Validation {
         }
         Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
         QrCodeMessage qrm = new QrCodeMessage(student.getUsername(), student.getCpf());
-        return QRCodeGenerate.generateQRCodeImage(qrm, 300, 300);
+        return QRCodeGenerate.generateQRCodeImage(qrm, 400, 400);
     }
 
 }
