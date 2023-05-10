@@ -9,7 +9,11 @@ import io.github.ValterGabriell.FrequenciaAlunos.excpetion.RequestExceptions;
 import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsRepository;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
 
 @Service
 public class QRCodeService extends Validation {
@@ -22,17 +26,27 @@ public class QRCodeService extends Validation {
 
     /**
      * Method that create and returns qrcode with student id
+     *
      * @param studentId representing the student id to put data on qrcode
      * @return qrcode generated
      * @throws WriterException
      */
-    public BufferedImage generateQRCode(String studentId) throws WriterException, RequestExceptions {
+    public String generateQRCode(String studentId) throws WriterException, RequestExceptions {
         if (studentId.length() != 11) {
             throw new RequestExceptions(ExceptionsValues.ILLEGAL_CPF_LENGTH);
         }
         Student student = validateIfStudentExistsAndReturnIfExist(studentsRepository, studentId);
         QrCodeMessage qrm = new QrCodeMessage(student.getUsername(), student.getCpf());
-        return QRCodeGenerate.generateQRCodeImage(qrm, 150, 150);
+        BufferedImage bufferedImage = QRCodeGenerate.generateQRCodeImage(qrm, 150, 150);
+        String imageAsBase64;
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(bufferedImage, "png", baos);
+            imageAsBase64 = Base64.getEncoder().encodeToString(baos.toByteArray());
+            System.out.println(imageAsBase64);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return imageAsBase64;
     }
 
 }

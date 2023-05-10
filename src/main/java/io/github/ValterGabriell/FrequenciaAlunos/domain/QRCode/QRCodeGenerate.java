@@ -13,6 +13,7 @@ public class QRCodeGenerate {
     public static BufferedImage generateQRCodeImage(QrCodeMessage messageQrCode, int width, int height) throws WriterException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(messageQrCode.toString(), BarcodeFormat.QR_CODE, width, height);
-        return MatrixToImageWriter.toBufferedImage(bitMatrix);
+        BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+        return bufferedImage;
     }
 }
