@@ -1,8 +1,8 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.days;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -11,7 +11,6 @@ import java.util.Objects;
 public class Days {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private LocalDate date;
     private boolean justified;
@@ -21,15 +20,12 @@ public class Days {
 
     public Days(LocalDate date) {
         this.date = date;
+        this.id = String.valueOf(System.currentTimeMillis());
     }
 
     public Days(LocalDate date, boolean justified) {
         this.date = date;
         this.justified = false;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public boolean isJustified() {
@@ -45,6 +41,9 @@ public class Days {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public LocalDate getDate() {
         return date;
