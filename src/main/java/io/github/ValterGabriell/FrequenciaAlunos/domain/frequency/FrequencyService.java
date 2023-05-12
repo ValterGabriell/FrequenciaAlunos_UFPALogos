@@ -52,7 +52,7 @@ public class FrequencyService extends Validation {
         frequencyRepository.save(frequency);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
-        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " válidada! - Dia: " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
+        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " válidada! - Dia: " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
         return responseValidateFrequency;
     }
 
@@ -80,7 +80,7 @@ public class FrequencyService extends Validation {
         ResponseSheet responseSheet = new ResponseSheet();
         SheetManipulation sheetManipulation = new SheetManipulation();
         List<Student> students = studentsRepository.findAll();
-        responseSheet.setSheetName("Planilha do dia " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)) + ".xls");
+        responseSheet.setSheetName("Planilha do dia " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ".xls");
         responseSheet.setSheetByteArray(sheetManipulation.createSheet(students));
         return responseSheet;
     }
@@ -99,7 +99,7 @@ public class FrequencyService extends Validation {
                 .stream()
                 .filter(student -> frequencyRepository.findById(student.getCpf()).get().getDaysList().stream().anyMatch(_day -> _day.getDate().equals(date)))
                 .collect(Collectors.toList());
-        responseSheet.setSheetName("Planilha do dia " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)) + ".xls");
+        responseSheet.setSheetName("Planilha do dia " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ".xls");
         responseSheet.setSheetByteArray(sheetManipulation.createSheet(students, date));
         return responseSheet;
     }
@@ -122,7 +122,7 @@ public class FrequencyService extends Validation {
         frequencyRepository.save(frequency);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
-        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " justificada! - Dia: " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
+        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " justificada! - Dia: " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
         return responseValidateFrequency;
     }
 
@@ -146,7 +146,7 @@ public class FrequencyService extends Validation {
         daysRepository.save(dayFounded);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
-        responseValidateFrequency.setMessage("Justificativa para " + student.getUsername() + " atualizada! - Dia: " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
+        responseValidateFrequency.setMessage("Justificativa para " + student.getUsername() + " atualizada! - Dia: " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
         return responseValidateFrequency;
     }
 }
