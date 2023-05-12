@@ -1,10 +1,13 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.days;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.github.ValterGabriell.FrequenciaAlunos.domain.days.dto.DaysList;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Objects;
 
 @Entity
@@ -63,5 +66,9 @@ public class Days {
     @Override
     public int hashCode() {
         return Objects.hash(date);
+    }
+
+    public DaysList toDaysList() {
+        return new DaysList(this.date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)), this.justified);
     }
 }

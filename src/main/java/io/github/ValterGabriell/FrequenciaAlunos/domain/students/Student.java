@@ -1,11 +1,11 @@
 package io.github.ValterGabriell.FrequenciaAlunos.domain.students;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.ValterGabriell.FrequenciaAlunos.domain.frequency.Frequency;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
-public class Student {
+public class Student implements Comparable<Student> {
 
     @Id
     @Column(name = "cpf", nullable = false)
@@ -18,6 +18,7 @@ public class Student {
         this.cpf = cpf;
         this.username = username;
     }
+
     public Student() {
     }
 
@@ -35,5 +36,10 @@ public class Student {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public int compareTo(Student o) {
+        return this.username.compareTo(o.getUsername());
     }
 }

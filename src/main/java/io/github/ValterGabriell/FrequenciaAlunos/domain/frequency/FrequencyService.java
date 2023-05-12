@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ public class FrequencyService extends Validation {
 
     /**
      * method that validate student frequency
+     *
      * @param studentId represent primary key of student table
      * @return response with the student frequency validated or erro while validation frequency
      */
@@ -56,6 +58,7 @@ public class FrequencyService extends Validation {
 
     /**
      * return list with days that specific student watched class
+     *
      * @param studentId represent primary key of student table
      */
     public ResponseDaysThatStudentGoToClass getListOfDaysByFrequencyId(String studentId) throws RequestExceptions {
@@ -64,7 +67,9 @@ public class FrequencyService extends Validation {
         Frequency frequency = frequencyRepository.findById(student.getCpf()).get();
         ResponseDaysThatStudentGoToClass responseDaysThatStudentGoToClass = new ResponseDaysThatStudentGoToClass();
         responseDaysThatStudentGoToClass.setStudentId(student.getCpf());
-        responseDaysThatStudentGoToClass.setDaysListThatStudentGoToClass(frequency.getDaysList());
+
+        List<Days> daysList = frequency.getDaysList();
+        responseDaysThatStudentGoToClass.setDaysListThatStudentGoToClass(daysList);
         return responseDaysThatStudentGoToClass;
     }
 
@@ -75,13 +80,14 @@ public class FrequencyService extends Validation {
         ResponseSheet responseSheet = new ResponseSheet();
         SheetManipulation sheetManipulation = new SheetManipulation();
         List<Student> students = studentsRepository.findAll();
-        responseSheet.setSheetName("Planilha do dia " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ".xls");
+        responseSheet.setSheetName("Planilha do dia " + LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)) + ".xls");
         responseSheet.setSheetByteArray(sheetManipulation.createSheet(students));
         return responseSheet;
     }
 
     /**
      * create sheet for specified date
+     *
      * @param date that represent date to create sheet
      * @return sheet download
      */
@@ -93,14 +99,15 @@ public class FrequencyService extends Validation {
                 .stream()
                 .filter(student -> frequencyRepository.findById(student.getCpf()).get().getDaysList().stream().anyMatch(_day -> _day.getDate().equals(date)))
                 .collect(Collectors.toList());
-        responseSheet.setSheetName("Planilha do dia " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ".xls");
+        responseSheet.setSheetName("Planilha do dia " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)) + ".xls");
         responseSheet.setSheetByteArray(sheetManipulation.createSheet(students, date));
         return responseSheet;
     }
 
     /**
      * method to justify abscence of student on some class
-     * @param date date to validate student present
+     *
+     * @param date      date to validate student present
      * @param studentId student to be justified
      * @return string with message
      */
@@ -115,13 +122,14 @@ public class FrequencyService extends Validation {
         frequencyRepository.save(frequency);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
-        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " justificada! - Dia: " + LocalDate.now());
+        responseValidateFrequency.setMessage("Frequência para " + student.getUsername() + " justificada! - Dia: " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
         return responseValidateFrequency;
     }
 
     /**
      * update the justified field changing it from true to false
-     * @param date date to change the student present
+     *
+     * @param date      date to change the student present
      * @param studentId student to be justified
      * @return string with message
      */
@@ -134,11 +142,11 @@ public class FrequencyService extends Validation {
                 .findFirst()
                 .orElseThrow(() -> new RequestExceptions(ExceptionsValues.DAY_NOT_FOUND));
 
-        dayFounded.setJustified(!dayFounded.isJustified());
+        frequency.getDaysList().remove(dayFounded);
         daysRepository.save(dayFounded);
 
         ResponseValidateFrequency responseValidateFrequency = new ResponseValidateFrequency();
-        responseValidateFrequency.setMessage("Justificativa para " + student.getUsername() + " atualizada! - Dia: " + LocalDate.now());
+        responseValidateFrequency.setMessage("Justificativa para " + student.getUsername() + " atualizada! - Dia: " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
         return responseValidateFrequency;
     }
 }

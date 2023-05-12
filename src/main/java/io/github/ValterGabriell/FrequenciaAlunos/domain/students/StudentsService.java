@@ -11,6 +11,7 @@ import io.github.ValterGabriell.FrequenciaAlunos.infra.repository.StudentsReposi
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static io.github.ValterGabriell.FrequenciaAlunos.excpetion.ExceptionsValues.STUDENT_ALREADY_SAVED;
@@ -41,8 +42,7 @@ public class StudentsService extends Validation {
         Student student = request.toModel();
         if (request.usernameIsNull()
                 && request.isFieldHasNumberExcatlyOfChars(request.getCpf(), 11)
-                && request.usernameHasToBeMoreThan2Chars()
-                && request.fieldContainsOnlyLetters(request.getUsername())) {
+                && request.usernameHasToBeMoreThan2Chars()) {
             Frequency frequency = new Frequency();
             frequency.setDaysList(new ArrayList<>());
             frequency.setId(request.getCpf());
@@ -94,7 +94,9 @@ public class StudentsService extends Validation {
     }
 
     public List<Student> getAllStudentsFromDatabase() {
-        return studentsRepository.findAll();
+        List<Student> allStudents = studentsRepository.findAll();
+        Collections.sort(allStudents);
+        return allStudents;
     }
 
     public void deleteStudent(String studentId) {
