@@ -69,6 +69,6 @@ public class Days {
     }
 
     public DaysList toDaysList() {
-        return new DaysList(this.date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)), this.justified);
+        return new DaysList(this.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)), this.justified);
     }
 }
