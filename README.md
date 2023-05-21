@@ -1,19 +1,38 @@
 <h1 align="center">Sistema de frequência para o cursinho Logos da UFPA.</h1>
 
-##  Sobre esse projeto
-Este é um projeto que deve automatizar o sistema de frequência de alunos no cursinho gratuíto da UFPA.
-
 
 ## Indíce
 <!--ts-->
-   * [Como usar?](#como-usar)
+   * [Sobre o projeto](#sobre-o-projeto)
    * [Endpoints](#endpoints)
    * [Testes](#testes)
    * [Creditos](#creditos)
 <!--te-->
   
-<h1>Como usar?</h1>
-<img style="border-radius: 50%;" src="https://user-images.githubusercontent.com/63808405/171045850-84caf881-ee10-4782-9016-ea1682c4731d.jpeg" width="100px;" alt=""/>
+<h1>Sobre o projeto</h1>
+
+Este é um projeto que deve automatizar o sistema de frequência de alunos no cursinho gratuíto da UFPA. Os domínios estão divididos da seguinte maneira: </br>
+<img style="border-radius: 50%;" src="https://github.com/ValterGabriell/FrequenciaAlunos_UFPALogos/assets/63808405/a697be0a-6667-4d42-afed-0813628d9da6"/>
+<br>
+
+Arquitetura utilizada foi o Domain Drive Design, tendo como domínios principais:
+
+<ul>
+	<li>Student</li>
+	<li>Frequency</li>
+</ul>
+
+Domínios auxiliares:
+
+<ul>
+	<li>QRCode</li>
+</ul>
+
+Domínios genéricos:
+
+<ul>
+	<li>Sheet</li>
+</ul>
   
 <h1>Endpoints</h1>
 <h3>BASE URL</h3>
@@ -409,7 +428,7 @@ no content
 
 
 
-<h1>Créditos</h1>
+<h1>Creditos</h1>
 
 ---
 
