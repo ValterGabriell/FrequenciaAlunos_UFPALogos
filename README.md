@@ -13,7 +13,7 @@ Este é um projeto que deve automatizar o sistema de frequência de alunos no cu
 <!--te-->
   
 <h1>Como usar?</h1>
-<p>Clonar o projeto, rodar o projeto!</p>
+<img style="border-radius: 50%;" src="https://user-images.githubusercontent.com/63808405/171045850-84caf881-ee10-4782-9016-ea1682c4731d.jpeg" width="100px;" alt=""/>
   
 <h1>Endpoints</h1>
 <h3>BASE URL</h3>
