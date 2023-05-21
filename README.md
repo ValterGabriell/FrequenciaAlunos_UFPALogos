@@ -14,26 +14,6 @@
 Este é um projeto que deve automatizar o sistema de frequência de alunos no cursinho gratuíto da UFPA. Os domínios estão divididos da seguinte maneira: </br>
 <img style="border-radius: 50%;" src="https://github.com/ValterGabriell/FrequenciaAlunos_UFPALogos/assets/63808405/a697be0a-6667-4d42-afed-0813628d9da6"/>
 <br>
-
-Arquitetura utilizada foi o Domain Drive Design, tendo como domínios principais:
-
-<ul>
-	<li>Student</li>
-	<li>Frequency</li>
-</ul>
-
-Domínios auxiliares:
-
-<ul>
-	<li>QRCode</li>
-</ul>
-
-Domínios genéricos:
-
-<ul>
-	<li>Sheet</li>
-</ul>
-
 Cada aluno, ao ser criado, cria também uma frequência para ele, sem atribuição por relacionamento, mas como objeto separado, levando o mesmo id do aluno. A escolha por essa abordagem veio para que o dominío de frequência ficasse completamente isolado do domínio de aluno, tendo em vista que
 mesmo que um aluno seja excluído, ainda possamos gerar planilhas que possuam a frequência desse aluno salva lá. O cursinho possui uma rotatividade grande e poderíamos atrapalhar a criação de planilhas antigas caso a frequência fosse excluída também sempre que um aluno é deletado.
 <h1>Endpoints</h1>
