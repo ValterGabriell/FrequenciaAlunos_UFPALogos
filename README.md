@@ -33,7 +33,9 @@ Domínios genéricos:
 <ul>
 	<li>Sheet</li>
 </ul>
-  
+
+Cada aluno, ao ser criado, cria também uma frequência para ele, sem atribuição por relacionamento, mas como objeto separado, levando o mesmo id do aluno. A escolha por essa abordagem veio para que o dominío de frequência ficasse completamente isolado do domínio de aluno, tendo em vista que
+mesmo que um aluno seja excluído, ainda possamos gerar planilhas que possuam a frequência desse aluno salva lá. O cursinho possui uma rotatividade grande e poderíamos atrapalhar a criação de planilhas antigas caso a frequência fosse excluída também sempre que um aluno é deletado.
 <h1>Endpoints</h1>
 <h3>BASE URL</h3>
 
